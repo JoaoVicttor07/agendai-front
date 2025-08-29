@@ -19,7 +19,7 @@ export function Navbar() {
 
         <div className="flex gap-3 md:order-2 rtl:gap-reverse">
           <ModeToggle />
-          <Button className="border-2 border-blue-700 rounded-3xl text-sm text-blue-700 dark:border-blue-500 dark:text-white" variant="outline">Agendar agora</Button>
+          <Button className="border-2 border-blue-700 rounded-3xl text-sm text-blue-700 dark:border-blue-500 dark:text-white cursor-pointer" variant="outline">Agendar agora</Button>
           <button
             type="button"
             aria-controls="navbar-sticky"
@@ -27,7 +27,7 @@ export function Navbar() {
             onClick={() => setOpen((o) => !o)}
             className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
           >
-            <span className="sr-only">Open main menu</span>
+            <span className="sr-only">Abrir menu principal</span>
             <svg
               className="w-5 h-5"
               aria-hidden="true"
