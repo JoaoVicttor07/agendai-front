@@ -1,5 +1,13 @@
 import { Navbar } from "./components/navbar";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import {
+  Calendar,
+  FileText,
+  UserSearch,
+  Bot,
+  MonitorCheck,
+} from "lucide-react";
 
 export default function Home() {
   return (
@@ -14,19 +22,10 @@ export default function Home() {
             place-items-center
             gap-12 lg:gap-20
             px-6 lg:px-12
-            py-16
+            py-5
             max-w-7xl mx-auto
           "
         >
-          {/* Gradiente amplo adicional para o tema claro (usa novo token) */}
-          {/* <div
-            className="
-              pointer-events-none
-              absolute inset-y-0 right-0 w-[60%]
-              hidden lg:block dark:hidden
-              [background:var(--gradient-hero-light)]
-            "
-          /> */}
           {/* Decorativo atrás (blob) */}
           <div
             className="
@@ -55,7 +54,7 @@ export default function Home() {
               Atendimentos realizados por alunos supervisionados. Sem
               burocracia: preencha, confirme e compareça.
             </p>
-            <div className="mt-8 flex flex-wrap gap-4">
+            <div className="mt-8 flex flex-wrap gap-4 justify-center lg:justify-start">
               <Button
                 className="bg-blue-500 text-white dark:hover:bg-blue-800 cursor-pointer"
                 size="lg"
@@ -78,23 +77,7 @@ export default function Home() {
             <div className="grid w-full max-w-md gap-5">
               <div className="group flex items-start gap-4 rounded-xl bg-white/70 dark:bg-white/5 backdrop-blur-sm ring-1 ring-border/60 dark:ring-border/20 p-5 transition shadow-md hover:shadow-lg">
                 <div className="h-12 w-12 flex items-center justify-center rounded-lg bg-primary/10 text-primary">
-                  <svg
-                    width="26"
-                    height="26"
-                    viewBox="0 0 24 24"
-                    className="stroke-current"
-                    fill="none"
-                    strokeWidth="1.8"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <rect x="3" y="4" width="18" height="18" rx="2" />
-                    <line x1="3" y1="10" x2="21" y2="10" />
-                    <path d="M8 4v4M16 4v4" />
-                    <circle cx="8.5" cy="14.5" r="1.25" />
-                    <circle cx="12" cy="14.5" r="1.25" />
-                    <circle cx="15.5" cy="14.5" r="1.25" />
-                  </svg>
+                  <Calendar className="h-7 w-7" />
                 </div>
                 <div className="space-y-1">
                   <h3 className="font-semibold leading-none">
@@ -108,20 +91,7 @@ export default function Home() {
 
               <div className="group flex items-start gap-4 rounded-xl bg-white/70 dark:bg-white/5 backdrop-blur-sm ring-1 ring-border/60 dark:ring-border/20 p-5 transition shadow-md hover:shadow-lg">
                 <div className="h-12 w-12 flex items-center justify-center rounded-lg bg-primary/10 text-primary">
-                  <svg
-                    width="26"
-                    height="26"
-                    viewBox="0 0 24 24"
-                    className="stroke-current"
-                    fill="none"
-                    strokeWidth="1.8"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M12 2 2 7l10 5 10-5-10-5Z" />
-                    <path d="m2 17 10 5 10-5" />
-                    <path d="m2 12 10 5 10-5" />
-                  </svg>
+                  <FileText className="h-7 w-7" />
                 </div>
                 <div className="space-y-1">
                   <h3 className="font-semibold leading-none">
@@ -134,23 +104,7 @@ export default function Home() {
               </div>
               <div className="group flex items-start gap-4 rounded-xl bg-white/70 dark:bg-white/5 backdrop-blur-sm ring-1 ring-border/60 dark:ring-border/20 p-5 transition shadow-md hover:shadow-lg">
                 <div className="h-12 w-12 flex items-center justify-center rounded-lg bg-primary/10 text-primary">
-                  <svg
-                    width="26"
-                    height="26"
-                    viewBox="0 0 24 24"
-                    className="stroke-current"
-                    fill="none"
-                    strokeWidth="1.8"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M20 7h-9" />
-                    <path d="M14 17H5" />
-                    <circle cx="17" cy="17" r="3" />
-                    <circle cx="7" cy="7" r="3" />
-                    <path d="M17 14v-7" />
-                    <path d="M7 10v7" />
-                  </svg>
+                  <UserSearch className="h-7 w-7" />
                 </div>
                 <div className="space-y-1">
                   <h3 className="font-semibold leading-none">Zero custo</h3>
@@ -159,6 +113,168 @@ export default function Home() {
                   </p>
                 </div>
               </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ===== COMO FUNCIONA ===== */}
+        <section className="px-6 lg:px-12 py-5 max-w-7xl mx-auto">
+          {/* Título e intro */}
+          <div className="text-center">
+            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-tight text-gray-900 dark:text-gray-100">
+              Como funciona
+            </h2>
+            <p className="mt-6 max-w-xl mx-auto text-lg text-gray-600 dark:text-gray-300">
+              Agendar seu atendimento é simples. Siga os passos abaixo.
+            </p>
+          </div>
+
+          {/* Wrapper dos cards */}
+          {/* Em mobile: empilhado (gap grande). Em desktop: linha com conectores */}
+          <div
+            className="
+              mt-16
+              flex flex-col items-center gap-12
+              lg:flex-row lg:items-stretch lg:justify-between lg:gap-10
+            "
+          >
+            {/* Card 1 */}
+            <div
+              className="
+                relative
+                flex flex-col items-center
+              "
+            >
+              <Card
+                className="
+                  w-full max-w-[320px] lg:w-full lg:h-full
+                  border-0 rounded-2xl
+                  bg-primary/9 dark:bg-white/[0.04]
+                  px-8 py-12
+                  flex flex-col items-center text-center gap-0
+                  shadow-sm hover:shadow-md transition
+                "
+              >
+                <CardHeader className="flex flex-col items-center gap-6 p-0">
+                  <div className="flex h-15 w-15 items-center justify-center rounded-full bg-primary/20">
+                    <Bot className="h-8 w-8 text-primary" />
+                  </div>
+                  <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-primary-foreground text-sm font-semibold">
+                    1
+                  </div>
+                </CardHeader>
+                <CardContent className="flex flex-col items-center gap-4 p-0 mt-6">
+                  <h3 className="text-xl font-semibold leading-snug">
+                    Inicie o Chatbot
+                  </h3>
+                  <p className="text-sm leading-relaxed text-muted-foreground">
+                    Clique no botão agendar para iniciar o atendimento com o
+                    Chatbot.
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Card 2 */}
+            <div
+              className="
+                relative flex flex-col 
+                items-center
+              "
+            >
+              <Card
+                className="
+                  w-full max-w-[320px] lg:w-full lg:h-full
+                  border-0 rounded-2xl
+                  bg-primary/9 dark:bg-white/[0.04]
+                  px-8 py-12
+                  flex flex-col items-center text-center gap-0
+                  shadow-sm hover:shadow-md transition
+                "
+              >
+                <CardHeader className="flex flex-col items-center gap-6 p-0">
+                  <div className="flex h-15 w-15 items-center justify-center rounded-full bg-primary/20">
+                    <FileText className="h-8 w-8 text-primary" />
+                  </div>
+                  <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-primary-foreground text-sm font-semibold">
+                    2
+                  </div>
+                </CardHeader>
+                <CardContent className="flex flex-col items-center gap-4 p-0 mt-6">
+                  <h3 className="text-xl font-semibold leading-snug">
+                    Informe seus dados
+                  </h3>
+                  <p className="text-sm leading-relaxed text-muted-foreground">
+                    Forneça nome, contato e informações básicas para cadastro.
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Card 3 */}
+            <div
+              className="
+                relative flex flex-col items-center"
+            >
+              <Card
+                className="
+                  w-full max-w-[320px] lg:w-full lg:h-full
+                  border-0 rounded-2xl
+                  bg-primary/9 dark:bg-white/[0.04]
+                  px-8 py-12
+                  flex flex-col items-center text-center gap-0
+                  shadow-sm hover:shadow-md transition
+                "
+              >
+                <CardHeader className="flex flex-col items-center gap-6 p-0">
+                  <div className="flex h-15 w-15 items-center justify-center rounded-full bg-primary/20">
+                    <UserSearch className="h-8 w-8 text-primary" />
+                  </div>
+                  <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-primary-foreground text-sm font-semibold">
+                    3
+                  </div>
+                </CardHeader>
+                <CardContent className="flex flex-col items-center gap-4 p-0 mt-6">
+                  <h3 className="text-xl font-semibold leading-snug">
+                    Escolha a sua área de atendimento
+                  </h3>
+                  <p className="text-sm leading-relaxed text-muted-foreground">
+                    Selecione a especialidade ou setor desejados.
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Card 4 (sem conector) */}
+            <div className="relative flex flex-col items-center">
+              <Card
+                className="
+                  w-full max-w-[320px] lg:w-full lg:h-full
+                  border-0 rounded-2xl
+                  bg-primary/9 dark:bg-white/[0.04]
+                  px-8 py-12
+                  flex flex-col items-center text-center gap-0
+                  shadow-sm hover:shadow-md transition
+                "
+              >
+                <CardHeader className="flex flex-col items-center gap-6 p-0">
+                  <div className="flex h-15 w-15 items-center justify-center rounded-full bg-primary/20">
+                    <MonitorCheck className="h-8 w-8 text-primary" />
+                  </div>
+                  <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-primary-foreground text-sm font-semibold">
+                    4
+                  </div>
+                </CardHeader>
+                <CardContent className="flex flex-col items-center gap-4 p-0 mt-6">
+                  <h3 className="text-xl font-semibold leading-snug">
+                    Confirme o seu agendamento
+                  </h3>
+                  <p className="text-sm leading-relaxed text-muted-foreground">
+                    Defina a data e horário disponíveis e finalize o
+                    agendamento.
+                  </p>
+                </CardContent>
+              </Card>
             </div>
           </div>
         </section>
