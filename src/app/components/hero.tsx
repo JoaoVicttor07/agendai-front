@@ -11,7 +11,7 @@ export function Hero() {
             place-items-center
             gap-12 lg:gap-20
             px-6 lg:px-12
-            py-5
+            py-5 lg:py-16
             max-w-7xl mx-auto
           "
         >
