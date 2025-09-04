@@ -1,9 +1,9 @@
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Bot, FileText, UserSearch, MonitorCheck } from "lucide-react"
+import { FileText, MonitorCheck, MousePointerClick, CalendarCheck } from "lucide-react"
 
 export function HowItWorks() {
     return (
-        <section className="px-6 lg:px-12 py-5 max-w-7xl mx-auto">
+        <section id="how-it-works" className="scroll-mt-24 px-6 lg:px-12 py-5 max-w-7xl mx-auto">
           {/* Título e intro */}
           <div className="text-center">
             <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-tight text-gray-900 dark:text-gray-100">
@@ -42,7 +42,7 @@ export function HowItWorks() {
               >
                 <CardHeader className="flex flex-col items-center gap-6 p-0">
                   <div className="flex h-15 w-15 items-center justify-center rounded-full bg-primary/20">
-                    <Bot className="h-8 w-8 text-primary" />
+                    <MousePointerClick className="h-8 w-8 text-primary" />
                   </div>
                   <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-primary-foreground text-sm font-semibold">
                     1
@@ -50,11 +50,10 @@ export function HowItWorks() {
                 </CardHeader>
                 <CardContent className="flex flex-col items-center gap-4 p-0 mt-6">
                   <h3 className="text-xl font-semibold leading-snug">
-                    Inicie o Chatbot
+                    Clique para agendar
                   </h3>
                   <p className="text-sm leading-relaxed text-muted-foreground">
-                    Clique no botão agendar para iniciar o atendimento com o
-                    Chatbot.
+                    Acesse nossa página de agendamento clicando em qualquer botão 'Agendar agora' em nosso site.
                   </p>
                 </CardContent>
               </Card>
@@ -90,7 +89,7 @@ export function HowItWorks() {
                     Informe seus dados
                   </h3>
                   <p className="text-sm leading-relaxed text-muted-foreground">
-                    Forneça nome, contato e informações básicas para cadastro.
+                    Preencha suas informações pessoais e escolha a especialidade que você precisa para o seu atendimento.
                   </p>
                 </CardContent>
               </Card>
@@ -113,7 +112,7 @@ export function HowItWorks() {
               >
                 <CardHeader className="flex flex-col items-center gap-6 p-0">
                   <div className="flex h-15 w-15 items-center justify-center rounded-full bg-primary/20">
-                    <UserSearch className="h-8 w-8 text-primary" />
+                    <CalendarCheck className="h-8 w-8 text-primary" />
                   </div>
                   <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-primary-foreground text-sm font-semibold">
                     3
@@ -121,10 +120,10 @@ export function HowItWorks() {
                 </CardHeader>
                 <CardContent className="flex flex-col items-center gap-4 p-0 mt-6">
                   <h3 className="text-xl font-semibold leading-snug">
-                    Escolha a sua área de atendimento
+                    Escolha data e hora
                   </h3>
                   <p className="text-sm leading-relaxed text-muted-foreground">
-                    Selecione a especialidade ou setor desejados.
+                    Selecione em nosso calendário a data e o horário que ficam melhores para você dentre as opções disponíveis.
                   </p>
                 </CardContent>
               </Card>
@@ -152,11 +151,10 @@ export function HowItWorks() {
                 </CardHeader>
                 <CardContent className="flex flex-col items-center gap-4 p-0 mt-6">
                   <h3 className="text-xl font-semibold leading-snug">
-                    Confirme o seu agendamento
+                    Confirme e Receba seu Protocolo
                   </h3>
                   <p className="text-sm leading-relaxed text-muted-foreground">
-                    Defina a data e horário disponíveis e finalize o
-                    agendamento.
+                    Revise todas as informações e confirme. Você receberá um número de protocolo único para consultar seu agendamento.
                   </p>
                 </CardContent>
               </Card>

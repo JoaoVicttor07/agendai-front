@@ -10,7 +10,7 @@ export function Footer() {
   const year = new Date().getFullYear()
 
   return (
-    <footer className="mt-24 bg-[#1F2536] text-white dark:bg-[#1F2536]">
+    <footer id="contact" className="mt-24 bg-[#1F2536] text-white dark:bg-[#1F2536]">
       {/* Top grid */}
       <div className="mx-auto max-w-7xl px-6 py-16 grid gap-14 md:gap-10 md:grid-cols-4">
         {/* Coluna 1: Logo + Tagline + Social */}

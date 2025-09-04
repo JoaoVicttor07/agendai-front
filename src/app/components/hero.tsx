@@ -1,9 +1,10 @@
 import { Button } from "@/components/ui/button"
-import { Calendar, FileText, UserSearch } from "lucide-react"
+import { Calendar, FileText, Link, UserSearch } from "lucide-react"
 
 export function Hero() {
     return(
         <section
+          id="start"
           className="
             relative isolate
             min-h-[72vh]
