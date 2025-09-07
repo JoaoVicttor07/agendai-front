@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import "./globals.css"
-import { ThemeProvider } from "./components/themeProvider"
+import { ThemeProvider } from "./_components/themeProvider"
 
 export const metadata: Metadata = {
   title: "AgendAI",
