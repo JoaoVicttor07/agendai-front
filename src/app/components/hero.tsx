@@ -1,5 +1,6 @@
+import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { Calendar, FileText, Link, UserSearch } from "lucide-react"
+import { Calendar, FileText, UserSearch } from "lucide-react"
 
 export function Hero() {
     return(
@@ -49,7 +50,7 @@ export function Hero() {
                 className="bg-blue-500 text-white dark:hover:bg-blue-800 cursor-pointer"
                 size="lg"
               >
-                Agendar
+                <Link href="/schedule">Agendar</Link>
               </Button>
               <Button
                 className="border-2 border-black cursor-pointer"
