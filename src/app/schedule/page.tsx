@@ -40,7 +40,6 @@ type FormData = {
   email: string;
   telefone: string;
   especialidade: string;
-  tipo: "Online" | "Presencial" | "";
   data: string; // yyyy-mm-dd
   hora: string;
 };
@@ -80,7 +79,7 @@ function normalizeCPF(cpf: string): string {
 }
 
 // Será implementado o endpoint da API
-async function verificarUsuario(
+async function checkUser(
   cpf: string
 ): Promise<{ exists: boolean; userData?: Partial<FormData> }> {
   // Simula delay da api
@@ -101,7 +100,7 @@ async function verificarUsuario(
   return { exists: false };
 }
 
-function hojeISO() {
+function todayISO() {
   const d = new Date();
   d.setHours(0, 0, 0, 0);
   const off = d.getTimezoneOffset();
@@ -109,7 +108,7 @@ function hojeISO() {
   return local.toISOString().slice(0, 10);
 }
 
-function gerarProtocolo() {
+function generateProtocol() {
   const ts = new Date();
   const stamp = `${ts.getFullYear()}${String(ts.getMonth() + 1).padStart(
     2,
@@ -130,7 +129,6 @@ export default function SchedulePage() {
     email: "",
     telefone: "",
     especialidade: "",
-    tipo: "",
     data: "",
     hora: "",
   });
@@ -167,7 +165,7 @@ export default function SchedulePage() {
 
     setIsLoading(true);
     try {
-      const result = await verificarUsuario(normalizeCPF(form.cpf));
+      const result = await checkUser(normalizeCPF(form.cpf));
       setUserFound(result.exists);
 
       // If user exists, prefill their data
@@ -226,7 +224,7 @@ export default function SchedulePage() {
   }
 
   function confirmarAgendamento() {
-    const p = gerarProtocolo();
+    const p = generateProtocol();
     setProtocolo(p);
     setDialogOpen(true);
   }
@@ -374,38 +372,7 @@ export default function SchedulePage() {
                       </select>
                     </div>
 
-                    <div className="sm:col-span-2">
-                      <span className="mb-2 block text-sm font-medium">
-                        Tipo de atendimento
-                      </span>
-                      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                        {(["Online", "Presencial"] as const).map((tipo) => {
-                          const selected = form.tipo === tipo;
-                          return (
-                            <button
-                              key={tipo}
-                              type="button"
-                              onClick={() => update("tipo", tipo)}
-                              className={clsx(
-                                "flex items-center justify-between rounded-md border px-4 py-3 text-left text-sm shadow-xs transition",
-                                selected
-                                  ? "border-ring bg-primary text-primary-foreground"
-                                  : "border-input hover:bg-accent"
-                              )}
-                              aria-pressed={selected}
-                            >
-                              <span className="font-medium">{tipo}</span>
-                              <CheckCircle2
-                                className={clsx(
-                                  "size-5",
-                                  selected ? "opacity-100" : "opacity-0"
-                                )}
-                              />
-                            </button>
-                          );
-                        })}
-                      </div>
-                    </div>
+                    
                   </div>
                 )}
 
@@ -418,7 +385,7 @@ export default function SchedulePage() {
                         </label>
                         <Input
                           type="date"
-                          min={hojeISO()}
+                          min={todayISO()}
                           value={form.data}
                           onChange={(e) => {
                             update("data", e.target.value);
