@@ -2,6 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
+
 import { HeaderMinimal } from "../_components/headerMinimal";
 import {
   Card,
@@ -138,6 +139,8 @@ export default function SchedulePage() {
   const [userFound, setUserFound] = React.useState<boolean | null>(null);
   const [dialogOpen, setDialogOpen] = React.useState(false);
   const [protocol, setProtocol] = React.useState<string | null>(null);
+
+  const [foundDialogOpen, setFoundDialogOpen] = React.useState(false);
   const [attemptedNext, setAttemptedNext] = React.useState(false);
   // Date picker state
   const dateFromForm = form.data ? new Date(form.data + "T00:00:00") : undefined; // safe parse
@@ -201,7 +204,8 @@ export default function SchedulePage() {
           ...prev,
           ...result.userData,
         }));
-        setStep(0);
+  setStep(0);
+  setFoundDialogOpen(true); // abre alerta informativo
       }
     } catch (error) {
       console.error("Error verifying user:", error);
@@ -631,6 +635,21 @@ export default function SchedulePage() {
             </div>
           </div>
         </section>
+
+        {/* Dialog: usuário encontrado */}
+        <AlertDialog open={foundDialogOpen} onOpenChange={setFoundDialogOpen}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Cadastro localizado</AlertDialogTitle>
+              <AlertDialogDescription>
+                Encontramos seus dados e eles foram preenchidos automaticamente. Revise suas informações e avance para continuar o agendamento.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogAction onClick={() => setFoundDialogOpen(false)}>Entendi</AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
 
         {/* Success Dialog */}
         <AlertDialog open={dialogOpen} onOpenChange={setDialogOpen}>
