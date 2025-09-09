@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import { HeaderMinimal } from "../_components/headerMinimal";
 import {
   Card,
@@ -24,15 +25,21 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
   CheckCircle2,
   CalendarClock,
   HelpCircle,
   ShieldCheck,
-  Link,
   Loader2,
 } from "lucide-react";
-import clsx from "clsx";
-import { normalize } from "path";
 
 type FormData = {
   cpf: string;
@@ -45,17 +52,9 @@ type FormData = {
 };
 
 const ESPECIALIDADES = [
-  "Clínico Geral",
-  "Cardiologia",
-  "Dermatologia",
-  "Ginecologia",
-  "Neurologia",
   "Nutrição",
-  "Odontologia",
-  "Oftalmologia",
-  "Ortopedia",
-  "Pediatria",
   "Psicologia",
+  "Direito",
 ];
 
 const HORARIOS = [
@@ -136,7 +135,8 @@ export default function SchedulePage() {
   const [isLoading, setIsLoading] = React.useState(false);
   const [userFound, setUserFound] = React.useState<boolean | null>(null);
   const [dialogOpen, setDialogOpen] = React.useState(false);
-  const [protocolo, setProtocolo] = React.useState<string | null>(null);
+  const [protocol, setProtocol] = React.useState<string | null>(null);
+  const [attemptedNext, setAttemptedNext] = React.useState(false);
 
   function update<K extends keyof FormData>(key: K, value: FormData[K]) {
     setForm((f) => ({ ...f, [key]: value }));
@@ -145,7 +145,7 @@ export default function SchedulePage() {
   // Validation per step
   const isStepValid = React.useMemo(() => {
     if (step === -1) {
-      // CPF validation - basic check for demo purposes
+      // CPF precisa conter exatamente 11 dígitos
       return form.cpf.replace(/\D/g, "").length === 11;
     }
     if (step === 0) {
@@ -155,8 +155,13 @@ export default function SchedulePage() {
         form.telefone.trim().length >= 8
       );
     }
-    // ...existing validation code...
-
+    if (step === 1) {
+      return form.especialidade.trim().length > 0;
+    }
+    if (step === 2) {
+      return form.data.trim().length === 10 && form.hora.trim().length > 0;
+    }
+    // Step 3 (revisão) depende dos anteriores já válidos
     return true;
   }, [step, form]);
 
@@ -185,16 +190,23 @@ export default function SchedulePage() {
   }
 
   function next() {
+    // Marca tentativa para exibir mensagens de erro
+    setAttemptedNext(true);
     if (step === -1) {
+      if (!isStepValid) return; // CPF inválido
       if (userFound === false) {
+        setAttemptedNext(false);
         setStep(0);
       } else {
         checkUserAndProceed();
       }
       return;
     }
-
-    if (step < totalSteps - 1 && isStepValid) setStep((s) => s + 1);
+    if (!isStepValid) return; // impede avanço mas mantém botão habilitado
+    if (step < totalSteps - 1) {
+      setAttemptedNext(false);
+      setStep((s) => s + 1);
+    }
   }
 
   function back() {
@@ -205,7 +217,6 @@ export default function SchedulePage() {
         email: "",
         telefone: "",
         especialidade: "",
-        tipo: "",
         data: "",
         hora: "",
       }));
@@ -216,16 +227,9 @@ export default function SchedulePage() {
     }
   }
 
-  function handleCPFChange(value: string) {
-    update("cpf", value);
-    if (userFound !== null) {
-      setUserFound(null);
-    }
-  }
-
   function confirmarAgendamento() {
     const p = generateProtocol();
-    setProtocolo(p);
+    setProtocol(p);
     setDialogOpen(true);
   }
 
@@ -276,8 +280,8 @@ export default function SchedulePage() {
                   {
                     [
                       "Informe seu CPF para identificação",
-                      "Informe seus dados básicos para contato.",
-                      "Selecione a área desejada e o tipo de atendimento.",
+                      "Preencha todos os campos para continuar.",
+                      "Selecione a área desejada.",
                       "Escolha a melhor data e um horário disponível.",
                       "Revise as informações antes de confirmar o agendamento.",
                     ][step + 1]
@@ -295,11 +299,25 @@ export default function SchedulePage() {
                       <Input
                         placeholder="000.000.000-00"
                         value={form.cpf}
-                        onChange={(e) => update("cpf", e.target.value)}
+                        onChange={(e) => {
+                          // permitir somente dígitos (limite 11)
+                          const onlyDigits = e.target.value
+                            .replace(/\D/g, "")
+                            .slice(0, 11);
+                          update("cpf", onlyDigits);
+                          if (userFound !== null) setUserFound(null); // reset identificação ao alterar
+                        }}
+                        inputMode="numeric"
+                        pattern="[0-9]*"
                       />
                       <p className="text-xs text-muted-foreground mt-2">
-                        Informe seu CPF.
+                        Informe seu CPF (somente Números).
                       </p>
+                      {attemptedNext && !isStepValid && (
+                        <p className="mt-1 text-xs text-red-500">
+                          CPF deve conter 11 números.
+                        </p>
+                      )}
                     </div>
 
                     {userFound === false && (
@@ -322,6 +340,9 @@ export default function SchedulePage() {
                         value={form.nome}
                         onChange={(e) => update("nome", e.target.value)}
                       />
+                      {attemptedNext && step === 0 && form.nome.trim().length < 3 && (
+                        <p className="mt-1 text-xs text-red-500">Informe seu nome.</p>
+                      )}
                     </div>
 
                     <div>
@@ -334,6 +355,9 @@ export default function SchedulePage() {
                         value={form.email}
                         onChange={(e) => update("email", e.target.value)}
                       />
+                      {attemptedNext && step === 0 && !/^\S+@\S+\.\S+$/.test(form.email) && (
+                        <p className="mt-1 text-xs text-red-500">Informe um e-mail válido.</p>
+                      )}
                     </div>
 
                     <div>
@@ -346,6 +370,9 @@ export default function SchedulePage() {
                         value={form.telefone}
                         onChange={(e) => update("telefone", e.target.value)}
                       />
+                      {attemptedNext && step === 0 && form.telefone.trim().length < 8 && (
+                        <p className="mt-1 text-xs text-red-500">Informe um telefone válido.</p>
+                      )}
                     </div>
                   </div>
                 )}
@@ -356,23 +383,28 @@ export default function SchedulePage() {
                       <label className="mb-1 block text-sm font-medium">
                         Especialidade
                       </label>
-                      <select
-                        className="h-9 w-full rounded-md border border-input bg-transparent px-3 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
-                        value={form.especialidade}
-                        onChange={(e) =>
-                          update("especialidade", e.target.value)
-                        }
-                      >
-                        <option value="">Selecione…</option>
-                        {ESPECIALIDADES.map((esp) => (
-                          <option key={esp} value={esp}>
-                            {esp}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
+                      <Select value={form.especialidade} onValueChange={(val) => update("especialidade", val)}>
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder="Selecione..." />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectGroup>
+                            <SelectLabel>Especialidades</SelectLabel>
+                            {ESPECIALIDADES.map((esp) => (
+                              <SelectItem key={esp} value={esp}>
+                                {esp}
+                              </SelectItem>
+                            ))}
+                          </SelectGroup>
+                        </SelectContent>
+                      </Select>
 
-                    
+                      {attemptedNext && step === 1 && !isStepValid && (
+                        <p className="mt-1 text-xs text-red-500">
+                          Selecione uma especialidade.
+                        </p>
+                      )}
+                    </div>
                   </div>
                 )}
 
@@ -389,10 +421,14 @@ export default function SchedulePage() {
                           value={form.data}
                           onChange={(e) => {
                             update("data", e.target.value);
-                            // Limpar horário ao trocar a data
                             update("hora", "");
                           }}
                         />
+                        {attemptedNext && step === 2 && !form.data && (
+                          <p className="mt-1 text-xs text-red-500">
+                            Selecione uma data.
+                          </p>
+                        )}
                       </div>
                       <div className="sm:col-span-1">
                         <label className="mb-1 block text-sm font-medium">
@@ -419,6 +455,14 @@ export default function SchedulePage() {
                         <p className="text-xs text-muted-foreground mt-2">
                           Os horários são ilustrativos (dados falsos).
                         </p>
+                        {attemptedNext &&
+                          step === 2 &&
+                          form.data &&
+                          !form.hora && (
+                            <p className="mt-1 text-xs text-red-500">
+                              Selecione um horário.
+                            </p>
+                          )}
                       </div>
                     </div>
                   </div>
@@ -436,7 +480,7 @@ export default function SchedulePage() {
 
                     <ResumoItem
                       label="Data"
-                      value={form.data && formatarData(form.data)}
+                      value={form.data && formatDate(form.data)}
                     />
                     <ResumoItem label="Horário" value={form.hora} />
                   </div>
@@ -449,7 +493,7 @@ export default function SchedulePage() {
                 </Button>
 
                 {step < totalSteps - 1 ? (
-                  <Button onClick={next} disabled={!isStepValid || isLoading}>
+                  <Button onClick={next} disabled={step === -1 && isLoading}>
                     {isLoading ? (
                       <>
                         <Loader2 className="mr-2 size-4 animate-spin" />
@@ -460,10 +504,7 @@ export default function SchedulePage() {
                     )}
                   </Button>
                 ) : (
-                  <Button
-                    onClick={confirmarAgendamento}
-                    disabled={!isStepValid}
-                  >
+                  <Button onClick={confirmarAgendamento}>
                     Confirmar agendamento
                   </Button>
                 )}
@@ -514,30 +555,15 @@ export default function SchedulePage() {
                       <HelpCircle className="size-4" />
                       <span>Precisa de ajuda?</span>
                     </div>
-                    <a
+                    <Link
                       className="text-sm font-medium text-primary underline-offset-4 hover:underline"
-                      href="mailto:suporte@agendai.com"
+                      href="#"
                     >
                       Fale com o suporte
-                    </a>
+                    </Link>
                   </div>
                 </CardFooter>
               </Card>
-
-              {/* Live summary */}
-              {/* <Card>
-                <CardHeader className="border-b">
-                  <CardTitle>Resumo</CardTitle>
-                  <CardDescription>Veja o que já foi preenchido.</CardDescription>
-                </CardHeader>
-                <CardContent className="pt-6 space-y-2 text-sm">
-                  <ResumoLinha label="Nome" value={form.nome} />
-                  <ResumoLinha label="Especialidade" value={form.especialidade} />
-                  <ResumoLinha label="Tipo" value={form.tipo} />
-                  <ResumoLinha label="Data" value={form.data && formatarData(form.data)} />
-                  <ResumoLinha label="Horário" value={form.hora} />
-                </CardContent>
-              </Card> */}
             </div>
           </div>
         </section>
@@ -549,9 +575,9 @@ export default function SchedulePage() {
               <AlertDialogTitle>Agendamento confirmado!</AlertDialogTitle>
               <AlertDialogDescription>
                 Seu atendimento foi agendado com sucesso.
-                {protocolo && (
+                {protocol && (
                   <span className="mt-2 block font-medium text-foreground">
-                    Protocolo: {protocolo}
+                    Protocolo: {protocol}
                   </span>
                 )}
               </AlertDialogDescription>
@@ -591,16 +617,7 @@ function ResumoItem({
   );
 }
 
-// function ResumoLinha({ label, value }: { label: string; value?: string | null }) {
-//   return (
-//     <div className="flex items-center justify-between gap-4">
-//       <span className="text-muted-foreground">{label}</span>
-//       <span className="font-medium">{value || "—"}</span>
-//     </div>
-//   )
-// }
-
-function formatarData(iso: string) {
+function formatDate(iso: string) {
   // yyyy-mm-dd -> dd/mm/yyyy
   const [y, m, d] = iso.split("-");
   return `${d}/${m}/${y}`;
