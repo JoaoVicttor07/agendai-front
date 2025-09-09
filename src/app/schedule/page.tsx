@@ -13,6 +13,12 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Calendar } from "@/components/ui/calendar"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
 import { Progress } from "@/components/ui/progress";
 import {
   AlertDialog,
@@ -39,6 +45,7 @@ import {
   HelpCircle,
   ShieldCheck,
   Loader2,
+  CalendarIcon
 } from "lucide-react";
 
 type FormData = {
@@ -50,6 +57,8 @@ type FormData = {
   data: string; // yyyy-mm-dd
   hora: string;
 };
+
+// Dados temporários enquanto não tem API
 
 const ESPECIALIDADES = [
   "Nutrição",
@@ -84,7 +93,7 @@ async function checkUser(
   // Simula delay da api
   await new Promise((resolve) => setTimeout(resolve, 1000));
 
-  // dados falso temporários
+  // dados falsos temporários
   if (cpf === "12345678900") {
     return {
       exists: true,
@@ -99,13 +108,6 @@ async function checkUser(
   return { exists: false };
 }
 
-function todayISO() {
-  const d = new Date();
-  d.setHours(0, 0, 0, 0);
-  const off = d.getTimezoneOffset();
-  const local = new Date(d.getTime() - off * 60000);
-  return local.toISOString().slice(0, 10);
-}
 
 function generateProtocol() {
   const ts = new Date();
@@ -137,6 +139,26 @@ export default function SchedulePage() {
   const [dialogOpen, setDialogOpen] = React.useState(false);
   const [protocol, setProtocol] = React.useState<string | null>(null);
   const [attemptedNext, setAttemptedNext] = React.useState(false);
+  // Date picker state
+  const dateFromForm = form.data ? new Date(form.data + "T00:00:00") : undefined; // safe parse
+  const [dateOpen, setDateOpen] = React.useState(false);
+  const [dateMonth, setDateMonth] = React.useState<Date | undefined>(dateFromForm);
+
+  function formatDisplayDate(date: Date | undefined) {
+    if (!date) return "";
+    return date.toLocaleDateString("pt-BR", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    });
+  }
+
+  function dateToISO(date: Date): string {
+    const y = date.getFullYear();
+    const m = String(date.getMonth() + 1).padStart(2, "0");
+    const d = String(date.getDate()).padStart(2, "0");
+    return `${y}-${m}-${d}`;
+  }
 
   function update<K extends keyof FormData>(key: K, value: FormData[K]) {
     setForm((f) => ({ ...f, [key]: value }));
@@ -415,15 +437,60 @@ export default function SchedulePage() {
                         <label className="mb-1 block text-sm font-medium">
                           Data
                         </label>
-                        <Input
-                          type="date"
-                          min={todayISO()}
-                          value={form.data}
-                          onChange={(e) => {
-                            update("data", e.target.value);
-                            update("hora", "");
-                          }}
-                        />
+                        <div className="relative flex gap-2">
+                          <Input
+                            id="date"
+                            readOnly
+                            value={formatDisplayDate(dateFromForm)}
+                            placeholder="dd/mm/aaaa"
+                            className="bg-background pr-10 cursor-pointer"
+                            onClick={() => setDateOpen(true)}
+                            onKeyDown={(e) => {
+                              if (e.key === "ArrowDown") {
+                                e.preventDefault();
+                                setDateOpen(true);
+                              }
+                            }}
+                          />
+                          <Popover open={dateOpen} onOpenChange={setDateOpen}>
+                            <PopoverTrigger asChild>
+                              <Button
+                                id="date-picker"
+                                variant="ghost"
+                                type="button"
+                                className="absolute top-1/2 right-2 size-7 -translate-y-1/2"
+                              >
+                                <CalendarIcon className="size-4" />
+                                <span className="sr-only">Selecionar data</span>
+                              </Button>
+                            </PopoverTrigger>
+                            <PopoverContent
+                              className="w-auto overflow-hidden p-0"
+                              align="start"
+                              sideOffset={4}
+                            >
+                              <Calendar
+                                mode="single"
+                                selected={dateFromForm}
+                                captionLayout="dropdown"
+                                month={dateMonth}
+                                onMonthChange={setDateMonth}
+                                disabled={(date) => {
+                                  const today = new Date();
+                                  today.setHours(0,0,0,0);
+                                  return date < today; // bloqueia dias passados
+                                }}
+                                onSelect={(date) => {
+                                  if (!date) return;
+                                  update("data", dateToISO(date));
+                                  update("hora", "");
+                                  setDateMonth(date);
+                                  setDateOpen(false);
+                                }}
+                              />
+                            </PopoverContent>
+                          </Popover>
+                        </div>
                         {attemptedNext && step === 2 && !form.data && (
                           <p className="mt-1 text-xs text-red-500">
                             Selecione uma data.
@@ -452,9 +519,6 @@ export default function SchedulePage() {
                             );
                           })}
                         </div>
-                        <p className="text-xs text-muted-foreground mt-2">
-                          Os horários são ilustrativos (dados falsos).
-                        </p>
                         {attemptedNext &&
                           step === 2 &&
                           form.data &&
@@ -511,7 +575,7 @@ export default function SchedulePage() {
               </CardFooter>
             </Card>
 
-            {/* Right - Info / Benefits / Help */}
+            {/* Info importantes / Beneficios / Ajuda */}
             <div className="space-y-6">
               <Card>
                 <CardHeader className="border-b">
@@ -618,7 +682,6 @@ function ResumoItem({
 }
 
 function formatDate(iso: string) {
-  // yyyy-mm-dd -> dd/mm/yyyy
   const [y, m, d] = iso.split("-");
   return `${d}/${m}/${y}`;
 }
