@@ -111,7 +111,7 @@ export function Footer() {
           © {year} AgendAI. Todos os direitos reservados.
         </p>
         <div className="flex flex-wrap gap-6 text-xs text-white/60">
-          <Link href="#" className="hover:text-white">Área restrita</Link>
+          <Link href="/login" className="hover:text-white">Área restrita</Link>
         </div>
       </div>
     </footer>
