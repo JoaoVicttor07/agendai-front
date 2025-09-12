@@ -57,7 +57,7 @@ export function Hero() {
                 variant="outline"
                 size="lg"
               >
-                Consultar agendamento
+                <Link href="/checkAppointment">Consultar agendamento</Link>
               </Button>
             </div>
           </div>
