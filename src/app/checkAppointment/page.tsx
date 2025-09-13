@@ -11,33 +11,86 @@ export default function CheckAppointmentPage() {
   const [cpf, setCpf] = React.useState("");
   const [dob, setDob] = React.useState("");
   const [state, setState] = React.useState<"idle" | "loading" | "success" | "empty" | "error">("idle");
-  const [data, setData] = React.useState<ResultData | null>(null);
+  const [single, setSingle] = React.useState<ResultData | null>(null);
+  const [history, setHistory] = React.useState<ResultData[] | null>(null);
+  const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
 
   function fakeFetch() {
+    setErrorMessage(null);
+    if (mode === "cpf") {
+      if (!cpf && !dob) {
+        setErrorMessage("Preencha o CPF e a data de nascimento.");
+        setState("error");
+        return;
+      }
+      if (!cpf) {
+        setErrorMessage("CPF não informado.");
+        setState("error");
+        return;
+      }
+      if (cpf.replace(/\D/g, "").length !== 11) {
+        setErrorMessage("CPF deve conter 11 dígitos.");
+        setState("error");
+        return;
+      }
+      if (!dob) {
+        setErrorMessage("Data de nascimento não informada.");
+        setState("error");
+        return;
+      }
+    }
+
     setState("loading");
     setTimeout(() => {
-      // Simulação de query
-      const success = (mode === "protocolo" && protocolo.includes("AGD")) || (mode === "cpf" && cpf.endsWith("0"));
-      if (success) {
-        setData({
-          protocolo: protocolo || "AGD-20250912-ABC123",
-          nome: "João da Silva",
-          especialidade: "Nutrição",
-          data: "12/09/2025",
+      if (mode === "protocolo") {
+        const success = protocolo.trim().length > 5;
+        if (success) {
+          setSingle({
+            protocolo: protocolo || "AGD-20250912-ABC123",
+            nome: "João da Silva",
+            especialidade: "Nutrição",
+            data: "12/09/2025",
             hora: "09:30",
-          status: "confirmado"
-        });
-        setState("success");
+            status: "confirmado"
+          });
+          setHistory(null);
+          setState("success");
+        } else {
+          clearResults();
+          setErrorMessage("Protocolo não localizado ou inválido.");
+          setState("error");
+        }
       } else {
-        setData(null);
-        setState("empty");
+        const digits = cpf.replace(/\D/g, "");
+        const validCombo = digits.length === 11 && !!dob;
+        if (validCombo) {
+          setHistory([
+            { protocolo: "AGD-20250801-AAAA11", nome: "João da Silva", especialidade: "Nutrição", data: "01/08/2025", hora: "09:00", status: "confirmado" },
+            { protocolo: "AGD-20250801-AAAA12", nome: "João da Silva", especialidade: "Nutrição", data: "01/08/2025", hora: "09:00", status: "confirmado" },
+            { protocolo: "AGD-20250801-AAAA13", nome: "João da Silva", especialidade: "Nutrição", data: "01/08/2025", hora: "09:00", status: "confirmado" },
+            { protocolo: "AGD-20250715-BBBB22", nome: "João da Silva", especialidade: "Psicologia", data: "15/07/2025", hora: "10:30", status: "pendente" },
+            { protocolo: "AGD-20250610-CCCC33", nome: "João da Silva", especialidade: "Direito", data: "10/06/2025", hora: "14:00", status: "cancelado" },
+          ]);
+          setSingle(null);
+          setState("success");
+        } else {
+          clearResults();
+          setErrorMessage("Dados incorretos ou inexistentes.");
+          setState("error");
+        }
       }
-    }, 1000);
+    }, 800);
   }
 
   function resetAll() {
     setState("idle");
-    setData(null);
+    setErrorMessage(null);
+    clearResults();
+  }
+
+  function clearResults() {
+    setSingle(null);
+    setHistory(null);
   }
 
   return (
@@ -69,21 +122,9 @@ export default function CheckAppointmentPage() {
               </CardHeader>
               <CardContent>
                 {mode === "protocolo" ? (
-                  <ProtocolForm
-                    value={protocolo}
-                    setValue={setProtocolo}
-                    isLoading={state === "loading"}
-                    onSubmit={fakeFetch}
-                  />
+                  <ProtocolForm value={protocolo} setValue={setProtocolo} isLoading={state === "loading"} onSubmit={fakeFetch} />
                 ) : (
-                  <CpfDobForm
-                    cpf={cpf}
-                    setCpf={setCpf}
-                    dob={dob}
-                    setDob={setDob}
-                    isLoading={state === "loading"}
-                    onSubmit={fakeFetch}
-                  />
+                  <CpfDobForm cpf={cpf} setCpf={setCpf} dob={dob} setDob={setDob} isLoading={state === "loading"} onSubmit={fakeFetch} />
                 )}
               </CardContent>
             </Card>
@@ -94,7 +135,15 @@ export default function CheckAppointmentPage() {
                 <CardDescription>Visualize os detalhes quando a busca retornar um agendamento.</CardDescription>
               </CardHeader>
               <CardContent>
-                <ResultArea state={state} data={data} onReset={resetAll} />
+                <ResultArea
+                  state={state}
+                  single={single}
+                  list={history}
+                  errorMessage={errorMessage || undefined}
+                  onReset={resetAll}
+                  onBackToHistory={() => setSingle(null)}
+                  onSelectFromHistory={(item) => setSingle(item)}
+                />
               </CardContent>
             </Card>
           </div>

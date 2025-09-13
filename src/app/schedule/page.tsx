@@ -53,7 +53,7 @@ export default function SchedulePage() {
                   {step === -1 && (
                     <IdentificationStep
                       value={form.cpf}
-                      onChange={(v) => { update("cpf", v); if (userFound !== null) {/* reset handled in hook if needed */} }}
+                      onChange={(v) => { update("cpf", v); if (userFound !== null) {} }}
                       attemptedNext={attemptedNext}
                       valid={isStepValid}
                       userFound={userFound}

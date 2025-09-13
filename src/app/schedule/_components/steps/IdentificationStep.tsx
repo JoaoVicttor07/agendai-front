@@ -1,6 +1,5 @@
 "use client";
 import { Input } from "@/components/ui/input";
-import { HORARIOS } from "../../_lib/constants"; // to avoid unused var TS warning we won't actually use HORARIOS here; remove if undesired
 
 interface Props {
   value: string;
