@@ -51,7 +51,7 @@ export default function CheckAppointmentPage() {
             especialidade: "Nutrição",
             data: "12/09/2025",
             hora: "09:30",
-            status: "confirmado"
+            status: "concluido"
           });
           setHistory(null);
           setState("success");
@@ -65,9 +65,9 @@ export default function CheckAppointmentPage() {
         const validCombo = digits.length === 11 && !!dob;
         if (validCombo) {
           setHistory([
-            { protocolo: "AGD-20250801-AAAA11", nome: "João da Silva", especialidade: "Nutrição", data: "01/08/2025", hora: "09:00", status: "confirmado" },
-            { protocolo: "AGD-20250801-AAAA12", nome: "João da Silva", especialidade: "Nutrição", data: "01/08/2025", hora: "09:00", status: "confirmado" },
-            { protocolo: "AGD-20250801-AAAA13", nome: "João da Silva", especialidade: "Nutrição", data: "01/08/2025", hora: "09:00", status: "confirmado" },
+            { protocolo: "AGD-20250801-AAAA11", nome: "João da Silva", especialidade: "Nutrição", data: "01/08/2025", hora: "09:00", status: "concluido" },
+            { protocolo: "AGD-20250801-AAAA12", nome: "João da Silva", especialidade: "Nutrição", data: "01/08/2025", hora: "09:00", status: "concluido" },
+            { protocolo: "AGD-20250801-AAAA13", nome: "João da Silva", especialidade: "Nutrição", data: "01/08/2025", hora: "09:00", status: "concluido" },
             { protocolo: "AGD-20250715-BBBB22", nome: "João da Silva", especialidade: "Psicologia", data: "15/07/2025", hora: "10:30", status: "pendente" },
             { protocolo: "AGD-20250610-CCCC33", nome: "João da Silva", especialidade: "Direito", data: "10/06/2025", hora: "14:00", status: "cancelado" },
           ]);
@@ -129,7 +129,7 @@ export default function CheckAppointmentPage() {
               </CardContent>
             </Card>
 
-            <Card>
+            <Card className="max-h-[600px] overflow-y-auto pr-1">
               <CardHeader>
                 <CardTitle className="text-lg">Resultado</CardTitle>
                 <CardDescription>Visualize os detalhes quando a busca retornar um agendamento.</CardDescription>
