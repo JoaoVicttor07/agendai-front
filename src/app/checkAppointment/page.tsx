@@ -134,7 +134,7 @@ export default function CheckAppointmentPage() {
                 <CardTitle className="text-lg">Resultado</CardTitle>
                 <CardDescription>Visualize os detalhes quando a busca retornar um agendamento.</CardDescription>
               </CardHeader>
-              <CardContent>
+              <CardContent className="sm:px-3">
                 <ResultArea
                   state={state}
                   single={single}

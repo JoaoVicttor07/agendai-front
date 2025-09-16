@@ -21,7 +21,7 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@/components/ui/select";
 
 export type SearchMode = "protocolo" | "cpf";
 
@@ -199,6 +199,10 @@ export function ResultArea({
   onSelectFromHistory?: (item: ResultData) => void;
   onBackToHistory?: () => void;
 }) {
+  const [statusFilter, setStatusFilter] = React.useState<
+    null | "concluido" | "pendente" | "cancelado"
+  >(null);
+
   if (state === "idle")
     return (
       <div className="text-sm text-muted-foreground">
@@ -232,16 +236,6 @@ export function ResultArea({
         <p className="font-medium text-destructive">
           {errorMessage || "Ocorreu um erro ao consultar."}
         </p>
-        <div>
-          <Button
-            size="sm"
-            variant="outline"
-            className="mt-3"
-            onClick={onReset}
-          >
-            Nova consulta
-          </Button>
-        </div>
       </div>
     );
   if (state === "success" && list && list.length > 1 && !single)
@@ -250,12 +244,14 @@ export function ResultArea({
         list={list}
         onReset={onReset}
         onSelect={onSelectFromHistory}
+        statusFilter={statusFilter}
+        setStatusFilter={setStatusFilter}
       />
     );
   if (state === "success" && single)
     return (
       <div className="space-y-4">
-        <div className="flex flex-wrap items-start justify-between gap-2 rounded-md border p-3">
+        <div className="flex flex-wrap items-center justify-between rounded-md border p-3">
           <div className="flex items-start gap-2">
             <CheckCircle2 className="mt-0.5 size-4 text-green-600" />
             <div className="text-sm">
@@ -266,8 +262,8 @@ export function ResultArea({
             </div>
           </div>
           {onBackToHistory && list && list.length > 1 && (
-            <Button size="sm" variant="outline" onClick={onBackToHistory}>
-              Voltar para histórico
+            <Button size="sm" onClick={onBackToHistory}>
+              <Undo2 className="mr-1 size-4" />
             </Button>
           )}
         </div>
@@ -282,17 +278,11 @@ export function ResultArea({
           <InfoItem label="Data" value={single.data} />
           <InfoItem label="Horário" value={single.hora} />
         </div>
-        <div className="pt-2">
-          <Button size="sm" onClick={onReset}>
-            <Undo2 className="mr-1 size-4" /> Nova consulta
-          </Button>
-        </div>
       </div>
     );
   return null;
 }
 
-// Helpers
 function InfoItem({ label, value }: { label: string; value: React.ReactNode }) {
   return (
     <div className="rounded-md border p-3 text-sm">
@@ -333,42 +323,80 @@ export function StatusBadge({ status }: { status: ResultData["status"] }) {
 
 export function ResultHistory({
   list,
-  onReset,
   onSelect,
+  statusFilter,
+  setStatusFilter,
 }: {
   list: ResultData[];
   onReset: () => void;
   onSelect?: (item: ResultData) => void;
+  statusFilter: null | "concluido" | "pendente" | "cancelado";
+  setStatusFilter: React.Dispatch<
+    React.SetStateAction<null | "concluido" | "pendente" | "cancelado">
+  >;
 }) {
+  const norm = (s: ResultData["status"]) =>
+    s
+      .normalize("NFD")
+      .replace(/\p{Diacritic}/gu, "")
+      .toLowerCase()
+      .trim();
+
+  const filtered = React.useMemo(
+    () =>
+      statusFilter
+        ? list.filter((it) => norm(it.status) === statusFilter)
+        : list,
+    [list, statusFilter]
+  );
+
   return (
     <div className="space-y-4">
       <div className="flex items-start gap-2 rounded-md border p-3">
         <CheckCircle2 className="mt-0.5 size-4 text-green-600" />
         <div className="text-sm">
-          <p className="font-medium">{list.length} agendamentos encontrados</p>
+          <p className="font-medium">
+            {filtered.length} agendamentos encontrados
+          </p>
           <p className="text-muted-foreground">
             Histórico completo do paciente.
           </p>
         </div>
       </div>
 
-      {/* <Select>
-        <SelectTrigger className="w-[180px]">
-          <SelectValue placeholder="Filtro" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectGroup>
-            <SelectLabel>Status</SelectLabel>
-            <SelectItem value="Concluido">Concluido</SelectItem>
-            <SelectItem value="Cancelado">Cancelado</SelectItem>
-            <SelectItem value="Pendente">Pendente</SelectItem>
-          </SelectGroup>
-        </SelectContent>
-      </Select> */}
+      <div className="flex justify-between">
+        <Select
+          key={statusFilter ?? "placeholder"}
+          value={statusFilter ?? undefined}
+          onValueChange={(v) =>
+            setStatusFilter(v as "concluido" | "pendente" | "cancelado")
+          }
+        >
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Filtrar por status" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectLabel>Status</SelectLabel>
+              <SelectItem value="concluido">Concluído</SelectItem>
+              <SelectItem value="pendente">Pendente</SelectItem>
+              <SelectItem value="cancelado">Cancelado</SelectItem>
+            </SelectGroup>
+          </SelectContent>
+        </Select>
+
+        <Button
+          variant="ghost"
+          onClick={() => setStatusFilter(null)}
+          disabled={!statusFilter}
+        >
+          Limpar filtro
+        </Button>
+      </div>
 
       <div className="flex flex-col divide-y rounded-md border">
-        {list.map((item) => (
-          <div key={item.protocolo} className="grid gap-4 p-4 sm:grid-cols-3">
+        {filtered.map((item) => (
+          <div key={item.protocolo} className="grid gap-2 p-4 sm:grid-cols-4">
             <div className="sm:col-span-2 space-y-1">
               <p className="text-xs text-muted-foreground">Protocolo</p>
               <p className="font-medium text-sm break-all">{item.protocolo}</p>
@@ -386,7 +414,7 @@ export function ResultHistory({
             <div className="flex items-center">
               <StatusBadge status={item.status} />
             </div>
-            <div className="flex items-center justify-end">
+            <div className="flex items-center justify-end sm:justify-start">
               {onSelect && (
                 <Button
                   size="sm"
@@ -399,11 +427,6 @@ export function ResultHistory({
             </div>
           </div>
         ))}
-      </div>
-      <div className="pt-2 flex flex-wrap gap-2">
-        <Button variant="outline" size="sm" onClick={onReset}>
-          <Undo2 className="mr-1 size-4" /> Nova consulta
-        </Button>
       </div>
     </div>
   );
