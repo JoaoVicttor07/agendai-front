@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -170,11 +171,15 @@ export function LoginForm({
             </div>
             <div className="pt-3">
               <Button type="submit" className="w-full" disabled={isSubmitting}>
+                
                 {isSubmitting && (
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 )}
+                <Link href="/dashboard">
                 {isSubmitting ? "Entrando" : "Entrar"}
+                </Link>
               </Button>
+              
             </div>
           </form>
         </CardContent>
