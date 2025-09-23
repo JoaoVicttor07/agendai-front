@@ -4,7 +4,7 @@ import * as React from "react";
 import {
   Gauge,
   Bot,
-  Building2,
+  MonitorCog,
   Users,
   Settings2,
   ClipboardClock,
@@ -34,7 +34,7 @@ const data = {
   navMain: [
     {
       title: "Dashboard",
-      url: "#",
+      url: "/dashboard",
       icon: Gauge,
     },
     {
@@ -52,7 +52,7 @@ const data = {
     {
       title: "Setores e especialidades",
       url: "#",
-      icon: Settings2,
+      icon: MonitorCog,
     },
   ],
   // navSecondary: [
@@ -96,7 +96,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
-        <NavProjects projects={data.configs} />
+        <NavProjects configs={data.configs} />
         {/* <NavSecondary items={data.navSecondary} /> */}
       </SidebarContent>
       <SidebarFooter>
