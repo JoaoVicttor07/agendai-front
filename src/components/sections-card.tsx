@@ -40,7 +40,7 @@ export function SectionCards() {
           </CardAction>
         </CardHeader>
         <CardFooter className="flex-col items-start gap-1.5 text-sm">
-          <div className="line-clamp-1 flex gap-2 font-medium">
+          <div className="line-clamp-1 flex flex-wrap gap-2 font-medium">
             <Badge variant="outline">
               <Check className="size-4 text-green-500" />3 concluídos
             </Badge>
