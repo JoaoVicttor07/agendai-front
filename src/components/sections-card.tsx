@@ -96,6 +96,7 @@ export function SectionCards() {
           <div className="text-muted-foreground">Lorem Ipsum</div>
         </CardFooter>
       </Card>
+
       <Card className="@container/card">
         <CardHeader>
           <CardDescription>Especialidade mais procurada</CardDescription>
@@ -118,6 +119,7 @@ export function SectionCards() {
           <div className="text-muted-foreground">Segunda mais procurada: Nutrição (28)</div>
         </CardFooter>
       </Card>
+      
     </div>
   );
 }

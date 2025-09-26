@@ -1,6 +1,6 @@
 "use client"
 
-import { SidebarIcon } from "lucide-react"
+import { SidebarIcon, Plus } from "lucide-react"
 
 import { SearchForm } from "@/components/search-form"
 import { ModeToggle } from "@/app/_components/themeToggle"
@@ -23,11 +23,20 @@ export function SiteHeader() {
         >
           <SidebarIcon />
         </Button>
+        
         <Separator orientation="vertical" className="mr-2 h-4" />
         
-        
-        <SearchForm className="w-full sm:ml-auto sm:w-auto" />
         <ModeToggle />
+        <SearchForm className="w-full hidden sm:block sm:w-auto" />
+
+        <Button className="ml-auto h-8 bg-sidebar-primary text-white">
+          <Plus/>
+          Novo agendamento
+          </Button>
+        
+        
+        
+        
       </div>
     </header>
   )
