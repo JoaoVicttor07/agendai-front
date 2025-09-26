@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import {
   Card,
   CardAction,
+  CardContent,
   CardDescription,
   CardFooter,
   CardHeader,
@@ -15,6 +16,16 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 
 export function SectionCards() {
   return (
@@ -54,17 +65,36 @@ export function SectionCards() {
           <div className="text-muted-foreground">Ultima atualização: 12:05</div>
         </CardFooter>
       </Card>
+
       <Card className="@container/card">
         <CardHeader>
-          <CardDescription>Atendimentos realizados (este mês)</CardDescription>
+          <CardDescription>Atendimentos realizados</CardDescription>
           <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
             56
           </CardTitle>
           <CardAction>
-            <Badge variant="outline">
+            <Select>
+              <SelectTrigger className="h-9 rounded-lg border border-border/60 bg-card/80 px-2 text-sm font-medium text-muted-foreground shadow-none backdrop-blur transition hover:text-foreground focus:ring-2 focus:ring-primary/40 focus:ring-offset-0 dark:border-white/10 dark:text-muted-foreground">
+                <SelectValue placeholder="Filtro" />
+              </SelectTrigger>
+              <SelectContent align="end" className="min-w-[180px] rounded-lg border border-border/50 bg-card/95 p-2 shadow-lg">
+                <SelectGroup>
+                  <SelectLabel className="px-2 text-xs uppercase tracking-wide text-muted-foreground/70">
+                    Filtrar por
+                  </SelectLabel>
+                  <SelectItem value="week" className="rounded-lg text-sm font-medium data-[state=checked]:bg-primary/10 data-[state=checked]:text-primary">
+                    Semana
+                  </SelectItem>
+                  <SelectItem value="month" className="rounded-lg text-sm font-medium data-[state=checked]:bg-primary/10 data-[state=checked]:text-primary">
+                    Mês
+                  </SelectItem>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+            {/* <Badge variant="outline">
               <TrendingUp className="size-4 text-green-500" />
               ?
-            </Badge>
+            </Badge> */}
           </CardAction>
         </CardHeader>
         <CardFooter className="flex-col items-start gap-1.5 text-sm">
@@ -73,9 +103,10 @@ export function SectionCards() {
               <ChartNoAxesColumnIncreasing className="size-4 text-green-500" />+15% em relação ao mês passado
             </Badge>
           </div>
-          <div className="text-muted-foreground">Média de três atendimentos por dia útil.</div>
+          <div className="text-muted-foreground">Taxa de comparecimento: 78%</div>
         </CardFooter>
       </Card>
+      
       <Card className="@container/card">
         <CardHeader>
           <CardDescription>Novos pacientes (este mês)</CardDescription>
@@ -100,24 +131,33 @@ export function SectionCards() {
       <Card className="@container/card">
         <CardHeader>
           <CardDescription>Especialidade mais procurada</CardDescription>
-          <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
+          {/* <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
             Psicologia
-          </CardTitle>
-          <CardAction>
+          </CardTitle> */}
+          {/* <CardAction>
             <Badge variant="outline">
               <TrendingUp className="size-4 text-green-500" />
               ?
             </Badge>
-          </CardAction>
+          </CardAction> */}
         </CardHeader>
-        <CardFooter className="flex-col items-start gap-1.5 text-sm">
+        {/* <CardFooter className="flex-col items-start gap-1.5 text-sm">
           <div className="line-clamp-1 flex gap-2 font-medium">
             <Badge variant="outline">
               <Check className="size-4 text-green-500" />45 atendimentos (30% do total)
             </Badge>
           </div>
           <div className="text-muted-foreground">Segunda mais procurada: Nutrição (28)</div>
-        </CardFooter>
+        </CardFooter> */}
+        <CardContent>
+          <div className="flex flex-col  w-full border-2 rounded-lg">
+            <p>1 - Posicologia</p>
+            <p>2 - Direito</p>
+            <p>3 - Nutrição</p>
+            
+
+          </div>
+        </CardContent>
       </Card>
       
     </div>
