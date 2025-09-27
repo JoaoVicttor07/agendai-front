@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import { SectionCards } from "@/components/sections-card";
 import { QuickActions } from "@/components/quick-actions";
+import { ChartAreaInteractive } from "@/components/chart-interactive";
 
 export const metadata: Metadata = {
   title: "Dashboard",
@@ -21,9 +22,12 @@ export default function Page() {
               Visão geral dos agendamentos e métricas do sistema
             </p>
           </div>
-          <QuickActions/>
+          <QuickActions />
         </div>
         <SectionCards />
+        <div className="">
+          <ChartAreaInteractive />
+        </div>
       </main>
     </div>
   );

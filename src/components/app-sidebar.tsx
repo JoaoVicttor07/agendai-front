@@ -3,7 +3,6 @@
 import * as React from "react";
 import {
   Gauge,
-  Bot,
   Stethoscope,
   Users,
   ClipboardClock,
