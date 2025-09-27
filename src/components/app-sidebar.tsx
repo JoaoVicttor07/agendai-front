@@ -4,9 +4,8 @@ import * as React from "react";
 import {
   Gauge,
   Bot,
-  MonitorCog,
+  Stethoscope,
   Users,
-  Settings2,
   ClipboardClock,
   Building
 } from "lucide-react";
@@ -52,7 +51,7 @@ const data = {
     {
       title: "Setores e especialidades",
       url: "#",
-      icon: MonitorCog,
+      icon: Stethoscope,
     },
   ],
   // navSecondary: [

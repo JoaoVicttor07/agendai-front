@@ -1,165 +1,107 @@
-import { TrendingUp, TrendingDown, Check, Clock, X, ChartNoAxesCombined, ChartNoAxesColumnIncreasing } from "lucide-react";
-
-import { Badge } from "@/components/ui/badge";
 import {
-  Card,
-  CardAction,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+  TrendingUp,
+  TrendingDown,
+  Users,
+  Calendar,
+  Stethoscope,
+  CircleCheckBig,
+  AlarmClockCheck
+} from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
+const metrics = [
+  {
+    title: "Agendamentos de hoje",
+    value: "12",
+    change: "+15%",
+    trend: "up",
+    icon: Calendar,
+    gradient: "gradient-blue",
+    details: "3 concluídos • 8 pendentes • 1 cancelado",
+    lastUpdate: "Última atualização: 12:05",
+  },
+  {
+    title: "Atendimentos realizados",
+    value: "176",
+    change: "+15%",
+    trend: "up",
+    icon: CircleCheckBig,
+    gradient: "gradient-green",
+    details: "Este mês",
+    subtitle: "Média de três atendimentos por dia útil",
+  },
+  {
+    title: "Novos pacientes",
+    value: "31",
+    change: "+7%",
+    trend: "up",
+    icon: Users,
+    gradient: "gradient-cyan-vibrant",
+    details: "Este mês",
+    subtitle: "Taxa de crescimento mensal",
+  },
+  {
+    title: "Taxa de comparecimento",
+    value: "88%",
+    change: "+2%",
+    trend: "up",
+    icon: AlarmClockCheck,
+    gradient: "gradient-purple",
+    details: "(176 de 200 agendamentos compareceram)",
+    subtitle: "Total de 24 ausências registradas.",
+  },
+];
 
 export function SectionCards() {
   return (
-    <div className="*:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card grid grid-cols-1 gap-4 px-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:shadow-xs lg:px-6 @xl/main:grid-cols-2 @5xl/main:grid-cols-4">
-      <Card className="@container/card">
-        <CardHeader>
-          <CardDescription>Agendamentos de hoje</CardDescription>
-          <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-            12
-          </CardTitle>
-          <CardAction>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Badge variant="outline" className="cursor-default">
-                  <TrendingUp className="size-4 text-green-500" />
-                  +15%
-                </Badge>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Comparado a terça feira passada</p>
-              </TooltipContent>
-            </Tooltip>
-          </CardAction>
-        </CardHeader>
-        <CardFooter className="flex-col items-start gap-1.5 text-sm">
-          <div className="line-clamp-1 flex flex-wrap gap-2 font-medium">
-            <Badge variant="outline">
-              <Check className="size-4 text-green-500" />3 concluídos
-            </Badge>
-            <Badge variant="outline">
-              <Clock className="size-4 text-yellow-500" />8 pendentes
-            </Badge>
-            <Badge variant="outline">
-              <X className="size-4 text-red-500" />1 cancelado
-            </Badge>
-          </div>
-          <div className="text-muted-foreground">Ultima atualização: 12:05</div>
-        </CardFooter>
-      </Card>
-
-      <Card className="@container/card">
-        <CardHeader>
-          <CardDescription>Atendimentos realizados</CardDescription>
-          <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-            56
-          </CardTitle>
-          <CardAction>
-            <Select>
-              <SelectTrigger className="h-9 rounded-lg border border-border/60 bg-card/80 px-2 text-sm font-medium text-muted-foreground shadow-none backdrop-blur transition hover:text-foreground focus:ring-2 focus:ring-primary/40 focus:ring-offset-0 dark:border-white/10 dark:text-muted-foreground">
-                <SelectValue placeholder="Filtro" />
-              </SelectTrigger>
-              <SelectContent align="end" className="min-w-[180px] rounded-lg border border-border/50 bg-card/95 p-2 shadow-lg">
-                <SelectGroup>
-                  <SelectLabel className="px-2 text-xs uppercase tracking-wide text-muted-foreground/70">
-                    Filtrar por
-                  </SelectLabel>
-                  <SelectItem value="week" className="rounded-lg text-sm font-medium data-[state=checked]:bg-primary/10 data-[state=checked]:text-primary">
-                    Semana
-                  </SelectItem>
-                  <SelectItem value="month" className="rounded-lg text-sm font-medium data-[state=checked]:bg-primary/10 data-[state=checked]:text-primary">
-                    Mês
-                  </SelectItem>
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-            {/* <Badge variant="outline">
-              <TrendingUp className="size-4 text-green-500" />
-              ?
-            </Badge> */}
-          </CardAction>
-        </CardHeader>
-        <CardFooter className="flex-col items-start gap-1.5 text-sm">
-          <div className="line-clamp-1 flex gap-2 font-medium">
-            <Badge variant="outline">
-              <ChartNoAxesColumnIncreasing className="size-4 text-green-500" />+15% em relação ao mês passado
-            </Badge>
-          </div>
-          <div className="text-muted-foreground">Taxa de comparecimento: 78%</div>
-        </CardFooter>
-      </Card>
-      
-      <Card className="@container/card">
-        <CardHeader>
-          <CardDescription>Novos pacientes (este mês)</CardDescription>
-          <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-            31
-          </CardTitle>
-          <CardAction>
-            <Badge variant="outline">
-              <TrendingUp className="size-4 text-green-500" />
-              ?
-            </Badge>
-          </CardAction>
-        </CardHeader>
-        <CardFooter className="flex-col items-start gap-1.5 text-sm">
-          <div className="line-clamp-1 flex gap-2 font-medium">
-            Lorem Ipsum
-          </div>
-          <div className="text-muted-foreground">Lorem Ipsum</div>
-        </CardFooter>
-      </Card>
-
-      <Card className="@container/card">
-        <CardHeader>
-          <CardDescription>Especialidade mais procurada</CardDescription>
-          {/* <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-            Psicologia
-          </CardTitle> */}
-          {/* <CardAction>
-            <Badge variant="outline">
-              <TrendingUp className="size-4 text-green-500" />
-              ?
-            </Badge>
-          </CardAction> */}
-        </CardHeader>
-        {/* <CardFooter className="flex-col items-start gap-1.5 text-sm">
-          <div className="line-clamp-1 flex gap-2 font-medium">
-            <Badge variant="outline">
-              <Check className="size-4 text-green-500" />45 atendimentos (30% do total)
-            </Badge>
-          </div>
-          <div className="text-muted-foreground">Segunda mais procurada: Nutrição (28)</div>
-        </CardFooter> */}
-        <CardContent>
-          <div className="flex flex-col  w-full border-2 rounded-lg">
-            <p>1 - Posicologia</p>
-            <p>2 - Direito</p>
-            <p>3 - Nutrição</p>
-            
-
-          </div>
-        </CardContent>
-      </Card>
-      
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      {metrics.map((metric, index) => (
+        <Card key={index} className="metric-card animate-slide-in" style={{ animationDelay: `${index * 0.1}s` }}>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium text-muted-foreground">
+              {metric.title}
+            </CardTitle>
+            <div className={`p-2 rounded-lg ${metric.gradient}`}>
+              <metric.icon className="h-4 w-4 text-white" />
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-foreground mb-1">
+              {metric.value}
+            </div>
+            <div className="flex items-center space-x-2 text-xs">
+              {metric.trend === "up" && (
+                <div className="flex items-center text-green-500">
+                  <TrendingUp className="w-3 h-3 mr-1" />
+                  {metric.change}
+                </div>
+              )}
+              {metric.trend === "down" && (
+                <div className="flex items-center text-red-500">
+                  <TrendingDown className="w-3 h-3 mr-1" />
+                  {metric.change}
+                </div>
+              )}
+              {metric.trend === "neutral" && (
+                <div className="text-muted-foreground">{metric.change}</div>
+              )}
+            </div>
+            <p className="text-xs text-muted-foreground mt-2">
+              {metric.details}
+            </p>
+            {metric.subtitle && (
+              <p className="text-xs text-muted-foreground mt-1">
+                {metric.subtitle}
+              </p>
+            )}
+            {metric.lastUpdate && (
+              <p className="text-xs text-muted-foreground mt-1">
+                {metric.lastUpdate}
+              </p>
+            )}
+          </CardContent>
+        </Card>
+      ))}
     </div>
   );
 }

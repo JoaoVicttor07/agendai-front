@@ -1,22 +1,30 @@
 import { Metadata } from "next";
 import { SectionCards } from "@/components/sections-card";
-import { Button } from "@/components/ui/button";
+import { QuickActions } from "@/components/quick-actions";
 
 export const metadata: Metadata = {
   title: "Dashboard",
   description: "AgendAI - Dashboard",
 };
 
-export const iframeHeight = "800px";
-export const description = "A sidebar with a header and a search form.";
+// export const iframeHeight = "800px";
+// export const description = "A sidebar with a header and a search form.";
 
 export default function Page() {
   return (
-    <div className="flex flex-1 flex-col">
-      
-      <div className="@container/main flex flex-1 flex-col gap-2 mt-10">
-          <SectionCards />
-      </div>
+    <div className="flex-1 flex flex-col overflow-hidden">
+      <main className="flex-1 overflow-y-auto p-6 space-y-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-foreground">Dashboard</h1>
+            <p className="text-muted-foreground">
+              Visão geral dos agendamentos e métricas do sistema
+            </p>
+          </div>
+          <QuickActions/>
+        </div>
+        <SectionCards />
+      </main>
     </div>
   );
 }
