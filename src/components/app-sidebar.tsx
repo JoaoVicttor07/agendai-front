@@ -7,7 +7,10 @@ import {
   Stethoscope,
   Users,
   ClipboardClock,
-  Building
+  Building,
+  Brain,
+  Settings,
+  ChartColumn
 } from "lucide-react";
 
 import { NavMain } from "@/components/nav-main";
@@ -65,7 +68,17 @@ const data = {
     {
       name: "Consultas com IA",
       url: "#",
-      icon: Bot,
+      icon: Brain,
+    },
+    {
+      name: "Relatórios",
+      url: "#",
+      icon: ChartColumn,
+    },
+    {
+      name: "Configurações",
+      url: "#",
+      icon: Settings,
     }
   ],
 };
