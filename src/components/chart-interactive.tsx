@@ -1,9 +1,8 @@
 "use client";
 
 import * as React from "react";
-import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
+import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 
-import { useIsMobile } from "@/hooks/use-mobile";
 import {
   Card,
   CardAction,
@@ -26,273 +25,169 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { Separator } from "@radix-ui/react-dropdown-menu";
 
-export const description = "Um gráfico de área interativo";
+export const description = "Gráfico mensal de agendamentos (total / concluídos / cancelados)";
 
-const chartData = [
-  { date: "2024-04-01", desktop: 222, mobile: 150 },
-  { date: "2024-04-02", desktop: 97, mobile: 180 },
-  { date: "2024-04-03", desktop: 167, mobile: 120 },
-  { date: "2024-04-04", desktop: 242, mobile: 260 },
-  { date: "2024-04-05", desktop: 373, mobile: 290 },
-  { date: "2024-04-06", desktop: 301, mobile: 340 },
-  { date: "2024-04-07", desktop: 245, mobile: 180 },
-  { date: "2024-04-08", desktop: 409, mobile: 320 },
-  { date: "2024-04-09", desktop: 59, mobile: 110 },
-  { date: "2024-04-10", desktop: 261, mobile: 190 },
-  { date: "2024-04-11", desktop: 327, mobile: 350 },
-  { date: "2024-04-12", desktop: 292, mobile: 210 },
-  { date: "2024-04-13", desktop: 342, mobile: 380 },
-  { date: "2024-04-14", desktop: 137, mobile: 220 },
-  { date: "2024-04-15", desktop: 120, mobile: 170 },
-  { date: "2024-04-16", desktop: 138, mobile: 190 },
-  { date: "2024-04-17", desktop: 446, mobile: 360 },
-  { date: "2024-04-18", desktop: 364, mobile: 410 },
-  { date: "2024-04-19", desktop: 243, mobile: 180 },
-  { date: "2024-04-20", desktop: 89, mobile: 150 },
-  { date: "2024-04-21", desktop: 137, mobile: 200 },
-  { date: "2024-04-22", desktop: 224, mobile: 170 },
-  { date: "2024-04-23", desktop: 138, mobile: 230 },
-  { date: "2024-04-24", desktop: 387, mobile: 290 },
-  { date: "2024-04-25", desktop: 215, mobile: 250 },
-  { date: "2024-04-26", desktop: 75, mobile: 130 },
-  { date: "2024-04-27", desktop: 383, mobile: 420 },
-  { date: "2024-04-28", desktop: 122, mobile: 180 },
-  { date: "2024-04-29", desktop: 315, mobile: 240 },
-  { date: "2024-04-30", desktop: 454, mobile: 380 },
-  { date: "2024-05-01", desktop: 165, mobile: 220 },
-  { date: "2024-05-02", desktop: 293, mobile: 310 },
-  { date: "2024-05-03", desktop: 247, mobile: 190 },
-  { date: "2024-05-04", desktop: 385, mobile: 420 },
-  { date: "2024-05-05", desktop: 481, mobile: 390 },
-  { date: "2024-05-06", desktop: 498, mobile: 520 },
-  { date: "2024-05-07", desktop: 388, mobile: 300 },
-  { date: "2024-05-08", desktop: 149, mobile: 210 },
-  { date: "2024-05-09", desktop: 227, mobile: 180 },
-  { date: "2024-05-10", desktop: 293, mobile: 330 },
-  { date: "2024-05-11", desktop: 335, mobile: 270 },
-  { date: "2024-05-12", desktop: 197, mobile: 240 },
-  { date: "2024-05-13", desktop: 197, mobile: 160 },
-  { date: "2024-05-14", desktop: 448, mobile: 490 },
-  { date: "2024-05-15", desktop: 473, mobile: 380 },
-  { date: "2024-05-16", desktop: 338, mobile: 400 },
-  { date: "2024-05-17", desktop: 499, mobile: 420 },
-  { date: "2024-05-18", desktop: 315, mobile: 350 },
-  { date: "2024-05-19", desktop: 235, mobile: 180 },
-  { date: "2024-05-20", desktop: 177, mobile: 230 },
-  { date: "2024-05-21", desktop: 82, mobile: 140 },
-  { date: "2024-05-22", desktop: 81, mobile: 120 },
-  { date: "2024-05-23", desktop: 252, mobile: 290 },
-  { date: "2024-05-24", desktop: 294, mobile: 220 },
-  { date: "2024-05-25", desktop: 201, mobile: 250 },
-  { date: "2024-05-26", desktop: 213, mobile: 170 },
-  { date: "2024-05-27", desktop: 420, mobile: 460 },
-  { date: "2024-05-28", desktop: 233, mobile: 190 },
-  { date: "2024-05-29", desktop: 78, mobile: 130 },
-  { date: "2024-05-30", desktop: 340, mobile: 280 },
-  { date: "2024-05-31", desktop: 178, mobile: 230 },
-  { date: "2024-06-01", desktop: 178, mobile: 200 },
-  { date: "2024-06-02", desktop: 470, mobile: 410 },
-  { date: "2024-06-03", desktop: 103, mobile: 160 },
-  { date: "2024-06-04", desktop: 439, mobile: 380 },
-  { date: "2024-06-05", desktop: 88, mobile: 140 },
-  { date: "2024-06-06", desktop: 294, mobile: 250 },
-  { date: "2024-06-07", desktop: 323, mobile: 370 },
-  { date: "2024-06-08", desktop: 385, mobile: 320 },
-  { date: "2024-06-09", desktop: 438, mobile: 480 },
-  { date: "2024-06-10", desktop: 155, mobile: 200 },
-  { date: "2024-06-11", desktop: 92, mobile: 150 },
-  { date: "2024-06-12", desktop: 492, mobile: 420 },
-  { date: "2024-06-13", desktop: 81, mobile: 130 },
-  { date: "2024-06-14", desktop: 426, mobile: 380 },
-  { date: "2024-06-15", desktop: 307, mobile: 350 },
-  { date: "2024-06-16", desktop: 371, mobile: 310 },
-  { date: "2024-06-17", desktop: 475, mobile: 520 },
-  { date: "2024-06-18", desktop: 107, mobile: 170 },
-  { date: "2024-06-19", desktop: 341, mobile: 290 },
-  { date: "2024-06-20", desktop: 408, mobile: 450 },
-  { date: "2024-06-21", desktop: 169, mobile: 210 },
-  { date: "2024-06-22", desktop: 317, mobile: 270 },
-  { date: "2024-06-23", desktop: 480, mobile: 530 },
-  { date: "2024-06-24", desktop: 132, mobile: 180 },
-  { date: "2024-06-25", desktop: 141, mobile: 190 },
-  { date: "2024-06-26", desktop: 434, mobile: 380 },
-  { date: "2024-06-27", desktop: 448, mobile: 490 },
-  { date: "2024-06-28", desktop: 149, mobile: 200 },
-  { date: "2024-06-29", desktop: 103, mobile: 160 },
-  { date: "2024-06-30", desktop: 446, mobile: 400 },
+
+const monthlyChartData = [
+  { month: "2024-07", label: "jul. 2024", total: 420, concluded: 385, canceled: 18 },
+  { month: "2024-08", label: "ago. 2024", total: 455, concluded: 410, canceled: 22 },
+  { month: "2024-09", label: "set. 2024", total: 502, concluded: 455, canceled: 28 },
+  { month: "2024-10", label: "out. 2024", total: 480, concluded: 440, canceled: 24 },
+  { month: "2024-11", label: "nov. 2024", total: 510, concluded: 470, canceled: 26 },
+  { month: "2024-12", label: "dez. 2024", total: 390, concluded: 360, canceled: 18 },
+  { month: "2025-01", label: "jan. 2025", total: 430, concluded: 395, canceled: 20 },
+  { month: "2025-02", label: "fev. 2025", total: 460, concluded: 420, canceled: 22 },
+  { month: "2025-03", label: "mar. 2025", total: 510, concluded: 475, canceled: 25 },
+  { month: "2025-04", label: "abr. 2025", total: 629, concluded: 535, canceled: 54 },
+  { month: "2025-05", label: "mai. 2025", total: 1043, concluded: 903, canceled: 144 },
+  { month: "2025-06", label: "jun. 2025", total: 1065, concluded: 988, canceled: 84 },
 ];
 
+
 const chartConfig = {
-  visitors: {
-    label: "Visitors",
-  },
-  desktop: {
-    label: "Desktop",
-    color: "var(--primary)",
-  },
-  mobile: {
-    label: "Mobile",
-    color: "var(--primary)",
-  },
+  total: { label: "Agendamentos", color: "#2563EB" },
+  concluded: { label: "Concluídos", color: "#10B981" },
+  canceled: { label: "Cancelados", color: "#F97316" },
 } satisfies ChartConfig;
 
+function monthKeyFromISO(isoDate: string) {
+  const d = new Date(isoDate + "T00:00:00");
+  const y = d.getFullYear();
+  const m = d.getMonth() + 1;
+  return `${y}-${String(m).padStart(2, "0")}`;
+}
+
+function monthLabelFromKey(key: string) {
+  const [y, m] = key.split("-").map(Number);
+  const d = new Date(y, m - 1, 1);
+  return d.toLocaleDateString("pt-BR", { month: "short", year: "numeric" });
+}
+
+/** agrega monthlyChartData por mês (soma dos valores das semanas do mês) */
+function aggregateMonthly(months: typeof monthlyChartData) {
+  const map = new Map<string, { month: string; total: number; concluded: number; canceled: number }>();
+  for (const w of months) {
+    const key = monthKeyFromISO(w.month);
+    if (!map.has(key)) map.set(key, { month: key, total: 0, concluded: 0, canceled: 0 });
+    const cur = map.get(key)!;
+    cur.total += (w.total || 0);
+    cur.concluded += (w.concluded || 0);
+    cur.canceled += (w.canceled || 0);
+  }
+  return Array.from(map.values())
+    .sort((a, b) => a.month.localeCompare(b.month))
+    .map(item => ({ ...item, label: monthLabelFromKey(item.month) }));
+}
+
+const MAX_BAR_SIZE = 200; // evita barras “gigantes” quando há poucos meses
+
 export function ChartAreaInteractive() {
-  const isMobile = useIsMobile();
-  const [timeRange, setTimeRange] = React.useState("90d");
+  const [activeMetric, setActiveMetric] = React.useState<keyof typeof chartConfig>("total");
+  const [monthsRange, setMonthsRange] = React.useState<"3" | "6" | "12">("6"); // padrão: 6 meses
 
-  React.useEffect(() => {
-    if (isMobile) {
-      setTimeRange("7d");
-    }
-  }, [isMobile]);
+  const aggregated = React.useMemo(() => aggregateMonthly(monthlyChartData), []);
 
-  const filteredData = chartData.filter((item) => {
-    const date = new Date(item.date);
-    const referenceDate = new Date("2024-06-30");
-    let daysToSubtract = 90;
-    if (timeRange === "30d") {
-      daysToSubtract = 30;
-    } else if (timeRange === "7d") {
-      daysToSubtract = 7;
-    }
-    const startDate = new Date(referenceDate);
-    startDate.setDate(startDate.getDate() - daysToSubtract);
-    return date >= startDate;
-  });
+  // aplica o range (3, 6, 12). Se houver menos dados do que o range, mostra o que tiver.
+  const monthlyData = React.useMemo(() => {
+    const n = parseInt(monthsRange, 10);
+    return aggregated.slice(-n);
+  }, [aggregated, monthsRange]);
 
   return (
-    <Card className="@container/card">
+    <Card className="@container/card metric-card animate-slide-in" style={{ animationDelay: `0.5s` }}>
       <CardHeader>
-        <CardTitle>Agendamentos vs Cancelamentos</CardTitle>
-        <CardDescription>
-          <span className="hidden @[540px]/card:block">
-            Total nos Últimos{" "}
-            {timeRange === "90d"
-              ? "3 meses"
-              : timeRange === "30d"
-              ? "30 dias"
-              : "7 dias"}
-          </span>
-          <span className="@[540px]/card:hidden">
-            Últimos{" "}
-            {timeRange === "90d"
-              ? "3 meses"
-              : timeRange === "30d"
-              ? "30 dias"
-              : "7 dias"}
-          </span>
-        </CardDescription>
-        <CardAction>
+        <CardTitle>Total de agendamentos por mês</CardTitle>
+        <CardDescription>{chartConfig[activeMetric].label} nos últimos {monthsRange} meses</CardDescription>
+
+        <CardAction className="flex gap-2 flex-wrap">
+          {/* Filtro de status (desktop/tablet) */}
           <ToggleGroup
             type="single"
-            value={timeRange}
-            onValueChange={setTimeRange}
+            value={activeMetric}
+            onValueChange={(value) => value && setActiveMetric(value as keyof typeof chartConfig)}
             variant="outline"
             className="hidden *:data-[slot=toggle-group-item]:!px-4 @[767px]/card:flex"
+            aria-label="Filtrar status"
           >
-            <ToggleGroupItem value="90d">Últimos 3 meses</ToggleGroupItem>
-            <ToggleGroupItem value="30d">Últimos 30 dias</ToggleGroupItem>
-            <ToggleGroupItem value="7d">Últimos 7 dias</ToggleGroupItem>
+            <ToggleGroupItem value="total">Total</ToggleGroupItem>
+            <ToggleGroupItem value="concluded">Concluídos</ToggleGroupItem>
+            <ToggleGroupItem value="canceled">Cancelados</ToggleGroupItem>
           </ToggleGroup>
-          <Select value={timeRange} onValueChange={setTimeRange}>
-            <SelectTrigger
-              className="flex w-40 **:data-[slot=select-value]:block **:data-[slot=select-value]:truncate @[767px]/card:hidden"
-              size="sm"
-              aria-label="Select a value"
-            >
-              <SelectValue placeholder="Last 3 months" />
+
+          <Separator className="hidden @[767px]/card:block" />
+
+          {/* Filtro de meses (desktop/tablet) */}
+          <ToggleGroup
+            type="single"
+            value={monthsRange}
+            onValueChange={(value) => value && setMonthsRange(value as "3" | "6" | "12")}
+            variant="outline"
+            className="hidden *:data-[slot=toggle-group-item]:!px-3 @[767px]/card:flex"
+            aria-label="Quantidade de meses"
+          >
+            <ToggleGroupItem value="3">3 meses</ToggleGroupItem>
+            <ToggleGroupItem value="6">6 meses</ToggleGroupItem>
+            <ToggleGroupItem value="12">12 meses</ToggleGroupItem>
+          </ToggleGroup>
+
+          {/* Mobile: status */}
+          <Select value={activeMetric} onValueChange={(v) => setActiveMetric(v as keyof typeof chartConfig)}>
+            <SelectTrigger className="flex w-40 @[767px]/card:hidden" size="sm" aria-label="Status">
+              <SelectValue placeholder="Status" />
             </SelectTrigger>
             <SelectContent className="rounded-xl">
-              <SelectItem value="90d" className="rounded-lg">
-                Últimos 3 meses
-              </SelectItem>
-              <SelectItem value="30d" className="rounded-lg">
-                Últimos 30 dias
-              </SelectItem>
-              <SelectItem value="7d" className="rounded-lg">
-                Últimos 7 dias
-              </SelectItem>
+              <SelectItem value="total">Total</SelectItem>
+              <SelectItem value="concluded">Concluídos</SelectItem>
+              <SelectItem value="canceled">Cancelados</SelectItem>
+            </SelectContent>
+          </Select>
+
+          {/* Mobile: meses */}
+          <Select value={monthsRange} onValueChange={(v) => setMonthsRange(v as "3" | "6" | "12")}>
+            <SelectTrigger className="flex w-40 @[767px]/card:hidden" size="sm" aria-label="Meses">
+              <SelectValue placeholder="Meses" />
+            </SelectTrigger>
+            <SelectContent className="rounded-xl">
+              <SelectItem value="3">Últimos 3 meses</SelectItem>
+              <SelectItem value="6">Últimos 6 meses</SelectItem>
+              <SelectItem value="12">Últimos 12 meses</SelectItem>
             </SelectContent>
           </Select>
         </CardAction>
       </CardHeader>
+
       <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">
-        <ChartContainer
-          config={chartConfig}
-          className="aspect-auto h-[250px] w-full"
-        >
-          <AreaChart data={filteredData}>
-            <defs>
-              <linearGradient id="fillDesktop" x1="0" y1="0" x2="0" y2="1">
-                <stop
-                  offset="5%"
-                  stopColor="var(--color-desktop)"
-                  stopOpacity={1.0}
-                />
-                <stop
-                  offset="95%"
-                  stopColor="var(--color-desktop)"
-                  stopOpacity={0.1}
-                />
-              </linearGradient>
-              <linearGradient id="fillMobile" x1="0" y1="0" x2="0" y2="1">
-                <stop
-                  offset="5%"
-                  stopColor="var(--color-mobile)"
-                  stopOpacity={0.8}
-                />
-                <stop
-                  offset="95%"
-                  stopColor="var(--color-mobile)"
-                  stopOpacity={0.1}
-                />
-              </linearGradient>
-            </defs>
+        <ChartContainer config={chartConfig} className="aspect-auto h-[250px] w-full">
+          <BarChart
+            data={monthlyData}
+            barCategoryGap="28%"  // espaçamento proporcional
+          >
             <CartesianGrid vertical={false} />
             <XAxis
-              dataKey="date"
+              dataKey="label"
               tickLine={false}
               axisLine={false}
               tickMargin={8}
-              minTickGap={32}
-              tickFormatter={(value) => {
-                const date = new Date(value);
-                return date.toLocaleDateString("en-US", {
-                  month: "short",
-                  day: "numeric",
-                });
-              }}
             />
             <ChartTooltip
-              cursor={false}
+              cursor={{ fill: "transparent" }}
               content={
                 <ChartTooltipContent
-                  labelFormatter={(value) => {
-                    return new Date(value).toLocaleDateString("en-US", {
-                      month: "short",
-                      day: "numeric",
-                    });
-                  }}
+                  labelFormatter={(value) => String(value)}
                   indicator="dot"
                 />
               }
             />
-            <Area
-              dataKey="mobile"
-              type="natural"
-              fill="url(#fillMobile)"
-              stroke="var(--color-mobile)"
-              stackId="a"
+            <Bar
+              dataKey={activeMetric}
+              fill={chartConfig[activeMetric].color}
+              radius={[6, 6, 0, 0]}
+              isAnimationActive
+              maxBarSize={MAX_BAR_SIZE} // impede barra “gordinha” quando há poucos meses
             />
-            <Area
-              dataKey="desktop"
-              type="natural"
-              fill="url(#fillDesktop)"
-              stroke="var(--color-desktop)"
-              stackId="a"
-            />
-          </AreaChart>
+          </BarChart>
         </ChartContainer>
       </CardContent>
     </Card>
