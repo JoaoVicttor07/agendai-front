@@ -2,22 +2,12 @@ import { Metadata } from "next";
 import { SectionCards } from "@/components/sections-card";
 import { QuickActions } from "@/components/quick-actions";
 import { ChartAreaInteractive } from "@/components/chart-interactive";
-import {
-  Card,
-  CardAction,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { RecentAppointments } from "@/components/recent-appointments";
 
 export const metadata: Metadata = {
   title: "Dashboard",
   description: "AgendAI - Dashboard",
 };
-
-// export const iframeHeight = "800px";
-// export const description = "A sidebar with a header and a search form.";
 
 export default function Page() {
   return (
@@ -33,9 +23,9 @@ export default function Page() {
           <QuickActions />
         </div>
         <SectionCards />
-        <div className="">
+        <div className="flex flex-col gap-5">
           <ChartAreaInteractive />
-
+          <RecentAppointments />
         </div>
       </main>
     </div>

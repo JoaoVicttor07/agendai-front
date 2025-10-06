@@ -145,6 +145,13 @@
   transform: translateY(-2px);
 }
 
+.status-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
 @keyframes pulse {
   0%,
   100% {

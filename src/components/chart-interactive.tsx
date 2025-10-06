@@ -65,7 +65,6 @@ function monthLabelFromKey(key: string) {
   return d.toLocaleDateString("pt-BR", { month: "short", year: "numeric" });
 }
 
-/** agrega monthlyChartData por mês (soma dos valores das semanas do mês) */
 function aggregateMonthly(months: typeof monthlyChartData) {
   const map = new Map<string, { month: string; total: number; concluded: number; canceled: number }>();
   for (const w of months) {
@@ -81,15 +80,14 @@ function aggregateMonthly(months: typeof monthlyChartData) {
     .map(item => ({ ...item, label: monthLabelFromKey(item.month) }));
 }
 
-const MAX_BAR_SIZE = 200; // evita barras “gigantes” quando há poucos meses
+const MAX_BAR_SIZE = 200;
 
 export function ChartAreaInteractive() {
   const [activeMetric, setActiveMetric] = React.useState<keyof typeof chartConfig>("total");
-  const [monthsRange, setMonthsRange] = React.useState<"3" | "6" | "12">("6"); // padrão: 6 meses
+  const [monthsRange, setMonthsRange] = React.useState<"3" | "6" | "12">("6");
 
   const aggregated = React.useMemo(() => aggregateMonthly(monthlyChartData), []);
 
-  // aplica o range (3, 6, 12). Se houver menos dados do que o range, mostra o que tiver.
   const monthlyData = React.useMemo(() => {
     const n = parseInt(monthsRange, 10);
     return aggregated.slice(-n);
@@ -162,7 +160,7 @@ export function ChartAreaInteractive() {
         <ChartContainer config={chartConfig} className="aspect-auto h-[250px] w-full">
           <BarChart
             data={monthlyData}
-            barCategoryGap="28%"  // espaçamento proporcional
+            barCategoryGap="28%"
           >
             <CartesianGrid vertical={false} />
             <XAxis
@@ -185,7 +183,7 @@ export function ChartAreaInteractive() {
               fill={chartConfig[activeMetric].color}
               radius={[6, 6, 0, 0]}
               isAnimationActive
-              maxBarSize={MAX_BAR_SIZE} // impede barra “gordinha” quando há poucos meses
+              maxBarSize={MAX_BAR_SIZE}
             />
           </BarChart>
         </ChartContainer>
