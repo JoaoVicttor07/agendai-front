@@ -111,6 +111,7 @@ export function ChartAreaInteractive() {
           >
             <ToggleGroupItem value="total">Total</ToggleGroupItem>
             <ToggleGroupItem value="concluded">Concluídos</ToggleGroupItem>
+            <ToggleGroupItem value="">Ausentes</ToggleGroupItem>
             <ToggleGroupItem value="canceled">Cancelados</ToggleGroupItem>
           </ToggleGroup>
 
@@ -138,6 +139,7 @@ export function ChartAreaInteractive() {
             <SelectContent className="rounded-xl">
               <SelectItem value="total">Total</SelectItem>
               <SelectItem value="concluded">Concluídos</SelectItem>
+              {/* <SelectItem value="">Ausentes</SelectItem> */}
               <SelectItem value="canceled">Cancelados</SelectItem>
             </SelectContent>
           </Select>

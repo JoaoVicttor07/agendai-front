@@ -2,7 +2,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Clock, MapPin, User } from "lucide-react";
-import { Button } from "./ui/button";
 
 const appointments = [
   {
@@ -11,7 +10,7 @@ const appointments = [
     specialty: "Médicina Veterinária",
     doctor: "Nara Lima",
     time: "09:00",
-    status: "confirmed",
+    status: "pending",
     sector: "Núcleo Veterinário",
   },
   {
@@ -20,7 +19,7 @@ const appointments = [
     specialty: "Direito",
     doctor: "Flavia Souza",
     time: "10:30",
-    status: "confirmed",
+    status: "pending",
     sector: "Núcleo de Práticas Integradas",
   },
   {
@@ -29,7 +28,7 @@ const appointments = [
     specialty: "Nutrição",
     doctor: "Antonio Pereira",
     time: "11:00",
-    status: "confirmed",
+    status: "pending",
     sector: "Núcleo de Práticas Integradas",
   },
   {
@@ -38,7 +37,7 @@ const appointments = [
     specialty: "Nutrição",
     doctor: "Mikaela Costa",
     time: "14:00",
-    status: "confirmed",
+    status: "pending",
     sector: "Núcleo Veterinário",
   },
   {
@@ -47,26 +46,25 @@ const appointments = [
     specialty: "Psicologia",
     doctor: "Clara Albuquerque",
     time: "15:30",
-    status: "confirmed",
+    status: "pending",
     sector: "Núcleo de Práticas Integradas",
   },
 ];
 
-// const statusConfig = {
-//   confirmed: { label: "Agendado", color: "bg-blue-500" },
-
-//   missed: { label: "Faltou", color: "bg-yellow-500" },
-//   completed: { label: "Realizado", color: "bg-gray-500" },
-//   cancelled: { label: "Cancelado", color: "bg-red-500" },
-// }
+const statusConfig = {
+  pending: { label: "Pendente", color: "bg-orange-500" },
+  missed: { label: "Ausente", color: "bg-yellow-500" },
+  completed: { label: "Concluída", color: "bg-gray-500" },
+  cancelled: { label: "Cancelado", color: "bg-red-500" },
+}
 
 export function RecentAppointments() {
   return (
-    <Card className="chart-container">
+    <Card className="chart-container metric-card animate-slide-in" style={{ animationDelay: `0.6s` }}>
       <CardHeader>
-        <CardTitle className="text-foreground">Próximos Agendamentos</CardTitle>
+        <CardTitle className="text-foreground">Agendamentos pendentes (hoje)</CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className="cursor-pointer">
         <div className="space-y-4">
           {appointments.map((appointment) => (
             <div
@@ -75,10 +73,7 @@ export function RecentAppointments() {
             >
               <Avatar>
                 <AvatarFallback className="bg-primary text-primary-foreground">
-                  {appointment.patient
-                    .split(" ")
-                    .map((n) => n[0])
-                    .join("")}
+                  <User className="w-5 h-5" />
                 </AvatarFallback>
               </Avatar>
 
@@ -87,10 +82,17 @@ export function RecentAppointments() {
                   <h4 className="text-sm font-medium text-foreground truncate">
                     {appointment.patient}
                   </h4>
-                  <div className="flex items-center space-x-2"></div>
+                  <div className="flex items-center space-x-2">
+                    <div
+                      className={`status-indicator ${statusConfig[appointment.status as keyof typeof statusConfig].color}`}
+                    />
+                    <Badge variant="secondary" className="text-xs">
+                      {statusConfig[appointment.status as keyof typeof statusConfig].label}
+                    </Badge>
+                  </div>
                 </div>
 
-                <div className="flex items-center space-x-4 mt-1 text-xs text-muted-foreground">
+                <div className="flex items-center space-x-4 mt-1 text-xs">
                   <div className="flex items-center space-x-1">
                     <Clock className="w-3 h-3" />
                     <span>{appointment.time}</span>
@@ -110,12 +112,6 @@ export function RecentAppointments() {
                     {appointment.specialty}
                   </Badge>
                 </div>
-              </div>
-
-              <div>
-                <Button size="sm" variant="outline" className="h-6 text-xs">
-                  Ver Detalhes
-                </Button>
               </div>
 
             </div>
