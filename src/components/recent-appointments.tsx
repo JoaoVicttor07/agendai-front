@@ -1,6 +1,14 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Clock, MapPin, User } from "lucide-react";
 
 const appointments = [
@@ -61,8 +69,17 @@ const statusConfig = {
 export function RecentAppointments() {
   return (
     <Card className="chart-container metric-card animate-slide-in" style={{ animationDelay: `0.6s` }}>
-      <CardHeader>
-        <CardTitle className="text-foreground">Agendamentos pendentes (hoje)</CardTitle>
+      <CardHeader className="flex items-center justify-between">
+        <CardTitle className="text-foreground">Próximos agendamentos</CardTitle>
+        <Select>
+          <SelectTrigger>
+            <SelectValue placeholder="Periodo"/>
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="today">Hoje</SelectItem>
+            <SelectItem value="7days">Próximos 7 dias</SelectItem>
+          </SelectContent>
+        </Select>
       </CardHeader>
       <CardContent className="cursor-pointer">
         <div className="space-y-4">

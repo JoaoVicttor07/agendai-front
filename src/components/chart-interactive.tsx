@@ -49,6 +49,7 @@ const monthlyChartData = [
 const chartConfig = {
   total: { label: "Agendamentos", color: "#2563EB" },
   concluded: { label: "Concluídos", color: "#10B981" },
+  pending: {label: "Ausentes", color: ""},
   canceled: { label: "Cancelados", color: "#F97316" },
 } satisfies ChartConfig;
 
@@ -139,7 +140,7 @@ export function ChartAreaInteractive() {
             <SelectContent className="rounded-xl">
               <SelectItem value="total">Total</SelectItem>
               <SelectItem value="concluded">Concluídos</SelectItem>
-              {/* <SelectItem value="">Ausentes</SelectItem> */}
+              <SelectItem value="pending">Ausentes</SelectItem>
               <SelectItem value="canceled">Cancelados</SelectItem>
             </SelectContent>
           </Select>
