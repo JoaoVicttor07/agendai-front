@@ -64,7 +64,7 @@ export default function SchedulePage() {
                       nome={form.nome}
                       email={form.email}
                       telefone={form.telefone}
-                      update={(k, v) => update(k as any, v)}
+                      update={(k, v) => update(k as keyof typeof form, v)}
                       attemptedNext={attemptedNext}
                       step={step}
                     />

@@ -53,7 +53,7 @@ export function HowItWorks() {
                     Clique para agendar
                   </h3>
                   <p className="text-sm leading-relaxed text-muted-foreground">
-                    Acesse nossa página de agendamento clicando em qualquer botão 'Agendar agora' em nosso site.
+                    Acesse nossa página de agendamento clicando em qualquer botão Agendar agora em nosso site.
                   </p>
                 </CardContent>
               </Card>
