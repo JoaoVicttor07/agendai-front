@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   description: "AgendAI - Dashboard",
 };
 
-export default function Page() {
+export default function Dashboard() {
   return (
     <div className="flex-1 flex flex-col overflow-hidden">
       <main className="flex-1 overflow-y-auto p-6 space-y-6">

@@ -12,6 +12,8 @@ import {
   ChartColumn
 } from "lucide-react";
 
+import Link from "next/link";
+
 import { NavMain } from "@/components/nav-main";
 import { NavProjects } from "@/components/nav-projects";
 // import { NavSecondary } from "@/components/nav-secondary";
@@ -40,7 +42,7 @@ const data = {
     },
     {
       title: "Consultar agendamentos",
-      url: "#",
+      url: "/appointments",
       icon: ClipboardClock,
       
     },
@@ -92,7 +94,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
-              <a href="#">
+              <Link href="/dashboard">
                 <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
                   <Building className="size-4" />
                 </div>
@@ -100,7 +102,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                   <span className="truncate font-medium">AgendAI</span>
                   <span className="truncate text-xs">Universidade Ficticia</span>
                 </div>
-              </a>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
