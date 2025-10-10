@@ -31,26 +31,26 @@ export const description = "Gráfico mensal de agendamentos (total / concluídos
 
 
 const monthlyChartData = [
-  { month: "2024-07", label: "jul. 2024", total: 420, concluded: 385, canceled: 18 },
-  { month: "2024-08", label: "ago. 2024", total: 455, concluded: 410, canceled: 22 },
-  { month: "2024-09", label: "set. 2024", total: 502, concluded: 455, canceled: 28 },
-  { month: "2024-10", label: "out. 2024", total: 480, concluded: 440, canceled: 24 },
-  { month: "2024-11", label: "nov. 2024", total: 510, concluded: 470, canceled: 26 },
-  { month: "2024-12", label: "dez. 2024", total: 390, concluded: 360, canceled: 18 },
-  { month: "2025-01", label: "jan. 2025", total: 430, concluded: 395, canceled: 20 },
-  { month: "2025-02", label: "fev. 2025", total: 460, concluded: 420, canceled: 22 },
-  { month: "2025-03", label: "mar. 2025", total: 510, concluded: 475, canceled: 25 },
-  { month: "2025-04", label: "abr. 2025", total: 629, concluded: 535, canceled: 54 },
-  { month: "2025-05", label: "mai. 2025", total: 1043, concluded: 903, canceled: 144 },
-  { month: "2025-06", label: "jun. 2025", total: 1065, concluded: 988, canceled: 84 },
+  { month: "2024-07", label: "jul. 2024", total: 420, concluded: 380, canceled: 18, absent: 22 },
+  { month: "2024-08", label: "ago. 2024", total: 455, concluded: 405, canceled: 22, absent: 28 },
+  { month: "2024-09", label: "set. 2024", total: 502, concluded: 450, canceled: 28, absent: 24 },
+  { month: "2024-10", label: "out. 2024", total: 480, concluded: 430, canceled: 24, absent: 26 },
+  { month: "2024-11", label: "nov. 2024", total: 510, concluded: 465, canceled: 26, absent: 19 },
+  { month: "2024-12", label: "dez. 2024", total: 390, concluded: 350, canceled: 18, absent: 22 },
+  { month: "2025-01", label: "jan. 2025", total: 430, concluded: 390, canceled: 20, absent: 20 },
+  { month: "2025-02", label: "fev. 2025", total: 460, concluded: 415, canceled: 22, absent: 23 },
+  { month: "2025-03", label: "mar. 2025", total: 510, concluded: 470, canceled: 25, absent: 15 },
+  { month: "2025-04", label: "abr. 2025", total: 629, concluded: 525, canceled: 54, absent: 50 },
+  { month: "2025-05", label: "mai. 2025", total: 1043, concluded: 890, canceled: 144, absent: 9 },
+  { month: "2025-06", label: "jun. 2025", total: 1065, concluded: 975, canceled: 84, absent: 6 },
 ];
 
 
 const chartConfig = {
   total: { label: "Agendamentos", color: "#2563EB" },
   concluded: { label: "Concluídos", color: "#10B981" },
-  pending: {label: "Ausentes", color: ""},
-  canceled: { label: "Cancelados", color: "#F97316" },
+  absent: { label: "Ausentes", color: "#F97316" },
+  canceled: { label: "Cancelados", color: "#EF4444" },
 } satisfies ChartConfig;
 
 function monthKeyFromISO(isoDate: string) {
@@ -67,14 +67,15 @@ function monthLabelFromKey(key: string) {
 }
 
 function aggregateMonthly(months: typeof monthlyChartData) {
-  const map = new Map<string, { month: string; total: number; concluded: number; canceled: number }>();
+  const map = new Map<string, { month: string; total: number; concluded: number; canceled: number; absent: number }>();
   for (const w of months) {
     const key = monthKeyFromISO(w.month);
-    if (!map.has(key)) map.set(key, { month: key, total: 0, concluded: 0, canceled: 0 });
+    if (!map.has(key)) map.set(key, { month: key, total: 0, concluded: 0, canceled: 0, absent: 0 });
     const cur = map.get(key)!;
     cur.total += (w.total || 0);
     cur.concluded += (w.concluded || 0);
     cur.canceled += (w.canceled || 0);
+    cur.absent += (w.absent || 0);
   }
   return Array.from(map.values())
     .sort((a, b) => a.month.localeCompare(b.month))
@@ -112,7 +113,7 @@ export function ChartAreaInteractive() {
           >
             <ToggleGroupItem value="total">Total</ToggleGroupItem>
             <ToggleGroupItem value="concluded">Concluídos</ToggleGroupItem>
-            <ToggleGroupItem value="">Ausentes</ToggleGroupItem>
+            <ToggleGroupItem value="absent">Ausentes</ToggleGroupItem>
             <ToggleGroupItem value="canceled">Cancelados</ToggleGroupItem>
           </ToggleGroup>
 
@@ -140,7 +141,7 @@ export function ChartAreaInteractive() {
             <SelectContent className="rounded-xl">
               <SelectItem value="total">Total</SelectItem>
               <SelectItem value="concluded">Concluídos</SelectItem>
-              <SelectItem value="pending">Ausentes</SelectItem>
+              <SelectItem value="absent">Ausentes</SelectItem>
               <SelectItem value="canceled">Cancelados</SelectItem>
             </SelectContent>
           </Select>

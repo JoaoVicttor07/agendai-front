@@ -26,7 +26,7 @@ import { cn } from "@/lib/utils";
 
 interface Notification {
   id: string;
-  type: "appointment" | "cancellation" | "new_patient" | "reminder";
+  type: "appointment" | "cancellation" | "absent" | "new_patient";
   title: string;
   description: string;
   time: string;
@@ -57,33 +57,32 @@ const mockNotifications: Notification[] = [
     type: "new_patient",
     title: "Novo paciente cadastrado",
     description:
-      "Ana Costa fez o seu cadastro no sistema",
+      "",
     time: "Há 2 horas",
     read: false,
   },
   {
     id: "4",
-    type: "reminder",
-    title: "Lembrete de consulta",
-    description: "Você tem 3 consultas agendadas para amanhã",
+    type: "absent",
+    title: "Paciente ausente",
+    description: "O paciente Carlos não compareceu à consulta de hoje às 10:00",
     time: "Há 3 horas",
     read: true,
-  },
-  
+  }
 ];
 
 const notificationIcons = {
   appointment: Calendar,
   cancellation: XCircle,
   new_patient: UserPlus,
-  reminder: Clock,
+  absent: Clock,
 };
 
 const notificationColors = {
   appointment: "text-blue-500 bg-blue-500/10",
   cancellation: "text-red-500 bg-red-500/10",
   new_patient: "text-green-500 bg-green-500/10",
-  reminder: "text-amber-500 bg-amber-500/10",
+  absent: "text-amber-500 bg-amber-500/10",
 };
 
 export function NotificationsPanel() {
