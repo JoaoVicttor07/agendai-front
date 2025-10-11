@@ -1,9 +1,8 @@
 "use client"
 
 import { useState } from "react"
-import { Calendar, Filter, Search, X } from "lucide-react"
+import { Calendar, Filter, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Calendar as CalendarComponent } from "@/components/ui/calendar"
@@ -45,17 +44,9 @@ export function AppointmentsFilters() {
 
   return (
     <div className="space-y-4">
-      {/* Campo de busca e filtros*/}
+      {/* Filtro */}
       <div className="flex gap-3">
-        {/* <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <Input
-            placeholder="Buscar..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-9 bg-card border-border"
-          />
-        </div> */}
+        
         <Button variant="outline" onClick={() => setShowFilters(!showFilters)} className="gap-2">
           <Filter className="h-4 w-4" />
           Filtros
@@ -77,7 +68,7 @@ export function AppointmentsFilters() {
       {showFilters && (
         <div className="bg-card border border-border rounded-lg p-4 space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {/* Date From */}
+            {/* Data inicial */}
             <div className="space-y-2">
               <Label>Data inicial</Label>
               <Popover>
@@ -119,7 +110,7 @@ export function AppointmentsFilters() {
             <div className="space-y-2">
               <Label>Status</Label>
               <Select value={status} onValueChange={setStatus}>
-                <SelectTrigger>
+                <SelectTrigger className="w-full">
                   <SelectValue placeholder="Todos os status" />
                 </SelectTrigger>
                 <SelectContent>
@@ -136,7 +127,7 @@ export function AppointmentsFilters() {
             <div className="space-y-2">
               <Label>Especialidade</Label>
               <Select value={specialty} onValueChange={setSpecialty}>
-                <SelectTrigger>
+                <SelectTrigger className="w-full">
                   <SelectValue placeholder="Todas as especialidades" />
                 </SelectTrigger>
                 <SelectContent>
@@ -156,7 +147,7 @@ export function AppointmentsFilters() {
             <div className="space-y-2">
               <Label>Setor</Label>
               <Select value={sector} onValueChange={setSector}>
-                <SelectTrigger>
+                <SelectTrigger className="w-full">
                   <SelectValue placeholder="Todos os setores" />
                 </SelectTrigger>
                 <SelectContent>
@@ -172,7 +163,7 @@ export function AppointmentsFilters() {
             <div className="space-y-2">
               <Label>Responsável</Label>
               <Select value={professional} onValueChange={setProfessional}>
-                <SelectTrigger>
+                <SelectTrigger className="w-full">
                   <SelectValue placeholder="Todos os responsáveis" />
                 </SelectTrigger>
                 <SelectContent>
