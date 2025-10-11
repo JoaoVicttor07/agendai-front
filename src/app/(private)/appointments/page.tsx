@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import { AppointmentsFilters } from "@/components/appointments-filters";
 
 export const metadata: Metadata = {
     title: "Agendamentos",
@@ -14,6 +15,8 @@ export default function Appointments() {
               <p className="text-muted-foreground">Consulte e gerencie todos os agendamentos do sistema</p>
             </div>
           </div>
+          <AppointmentsFilters/>
+
         </main>
     )
 }
