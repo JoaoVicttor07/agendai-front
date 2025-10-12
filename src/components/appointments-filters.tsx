@@ -12,7 +12,21 @@ import { cn } from "@/lib/utils"
 import { format } from "date-fns"
 import { ptBR } from "date-fns/locale"
 
-export function AppointmentsFilters() {
+interface AppointmentsFiltersProps {
+  onSearch: (filters: FilterValues) => void;
+}
+
+export interface FilterValues {
+  dateFrom?: Date;
+  dateTo?: Date;
+  status: string;
+  specialty: string;
+  sector: string;
+  professional: string;
+  searchTerm: string;
+}
+
+export function AppointmentsFilters({ onSearch }: AppointmentsFiltersProps) {
   const [dateFrom, setDateFrom] = useState<Date>()
   const [dateTo, setDateTo] = useState<Date>()
   const [status, setStatus] = useState<string>("all")
@@ -20,7 +34,7 @@ export function AppointmentsFilters() {
   const [sector, setSector] = useState<string>("all")
   const [professional, setProfessional] = useState<string>("all")
   const [searchTerm, setSearchTerm] = useState("")
-  const [showFilters, setShowFilters] = useState(false)
+  const [showFilters, setShowFilters] = useState(true)
 
   const activeFiltersCount = [
     dateFrom,
@@ -42,6 +56,18 @@ export function AppointmentsFilters() {
     setSearchTerm("")
   }
 
+  const handleSearch = () => {
+    onSearch({
+      dateFrom,
+      dateTo,
+      status,
+      specialty,
+      sector,
+      professional,
+      searchTerm,
+    })
+  }
+
   return (
     <div className="space-y-4">
       {/* Filtro */}
@@ -49,7 +75,7 @@ export function AppointmentsFilters() {
         
         <Button variant="outline" onClick={() => setShowFilters(!showFilters)} className="gap-2">
           <Filter className="h-4 w-4" />
-          Filtros
+          {showFilters ? "Ocultar filtros" : "Mostrar filtros"}
           {activeFiltersCount > 0 && (
             <Badge variant="default" className="ml-1 h-5 min-w-5 rounded-full px-1">
               {activeFiltersCount}
@@ -132,12 +158,10 @@ export function AppointmentsFilters() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">Todas as especialidades</SelectItem>
-                  <SelectItem value="cardiology">Cardiologia</SelectItem>
-                  <SelectItem value="dermatology">Dermatologia</SelectItem>
-                  <SelectItem value="neurology">Neurologia</SelectItem>
-                  <SelectItem value="orthopedics">Ortopedia</SelectItem>
-                  <SelectItem value="pediatrics">Pediatria</SelectItem>
-                  <SelectItem value="psychiatry">Psiquiatria</SelectItem>
+                  <SelectItem value="nutrition">Nutrição</SelectItem>
+                  <SelectItem value="labor-law">Direito Trabalhista</SelectItem>
+                  <SelectItem value="consumer-law">Direito do Consumidor</SelectItem>
+                  <SelectItem value="veterinary">Veterinária</SelectItem>
                   <SelectItem value="psychology">Psicologia</SelectItem>
                 </SelectContent>
               </Select>
@@ -153,7 +177,9 @@ export function AppointmentsFilters() {
                 <SelectContent>
                   <SelectItem value="all">Todos os setores</SelectItem>
                   <SelectItem value="integrated-pratices">Núcleo de práticas integradas</SelectItem>
-                  <SelectItem value ="vetenary-medicine">Medicina Veterinária</SelectItem>
+                  <SelectItem value ="juridical-practice">Núcleo de prática Jurídica</SelectItem>
+                  <SelectItem value ="veterinary-medicine">Medicina Veterinária</SelectItem>
+                  
                   
                 </SelectContent>
               </Select>
@@ -175,6 +201,18 @@ export function AppointmentsFilters() {
                 </SelectContent>
               </Select>
             </div>
+          </div>
+
+          {/* Botão de buscar */}
+          <div className="flex justify-end gap-3 pt-2">
+            <Button variant="outline" onClick={clearFilters}>
+              <X className="h-4 w-4 mr-2" />
+              Limpar filtros
+            </Button>
+            <Button onClick={handleSearch} className="gap-2">
+              <Filter className="h-4 w-4" />
+              Buscar agendamentos
+            </Button>
           </div>
         </div>
       )}

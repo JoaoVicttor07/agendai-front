@@ -4,9 +4,6 @@ import {
   Calendar,
   User,
   Stethoscope,
-  FileText,
-  UserPlus,
-  GraduationCap,
   X,
   CalendarClock,
 } from "lucide-react";
@@ -42,39 +39,37 @@ const statusConfig = {
   },
 };
 
-interface Appointment {
-  id: string | number;
-  status: "pending" | "completed" | "cancelled" | "absent";
-  patient: {
-    name: string;
-    phone: string;
-  };
-  professional: {
-    name: string;
-    specialty: string;
-    crm: string;
-  };
-  type: string;
-  date: string | Date;
-  time: string;
-  department: string;
-  studentResponsible: string;
-  createdBy: string;
-  createdAt: string | Date;
-  observations?: string;
-}
+// interface Appointment {
+//   id: string | number;
+//   status: "pending" | "completed" | "cancelled" | "absent";
+//   patient: {
+//     name: string;
+//     phone: string;
+//   };
+//   professional: {
+//     name: string;
+//     specialty: string;
+//     studentResponsible: string;
+//   };
+//   type: string;
+//   date: string | Date;
+//   time: string;
+//   department: string;
+//   createdBy: string;
+//   createdAt: string | Date;
+// }
 
-interface AppointmentDetailsSheetProps {
-  appointment: Appointment;
+interface AppointmentDetailsProps {
+  appointment: any;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
 
-export function AppointmentDetailsSheet({
+export function AppointmentDetails({
   appointment,
   open,
   onOpenChange,
-}: AppointmentDetailsSheetProps) {
+}: AppointmentDetailsProps) {
   if (!appointment) return null;
 
   const statusInfo =
@@ -97,8 +92,8 @@ export function AppointmentDetailsSheet({
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent className="w-full sm:max-w-xl flex flex-col p-0">
-        <div className="px-6 pt-6 pb-4 border-b">
+      <SheetContent className="w-full sm:max-w-xl flex flex-col h-full p-0">
+        <div className="px-6 pt-6 pb-4 border-b shrink-0">
           <SheetHeader>
             <SheetTitle>Detalhes do Agendamento</SheetTitle>
             <SheetDescription>
@@ -107,8 +102,8 @@ export function AppointmentDetailsSheet({
           </SheetHeader>
         </div>
 
-        <ScrollArea className="flex-1 px-6">
-          <div className="space-y-6 py-6">
+        <ScrollArea className="flex-1 overflow-auto">
+          <div className="space-y-6 py-6 px-6">
             {/* Status */}
             <div>
               <Badge
@@ -149,7 +144,7 @@ export function AppointmentDetailsSheet({
             <div className="space-y-3">
               <h3 className="font-semibold text-foreground flex items-center gap-2">
                 <Stethoscope className="h-4 w-4" />
-                Informações do Profissional
+                Informações do Responsável
               </h3>
               <div className="bg-muted/50 rounded-lg p-4 space-y-2">
                 <div className="flex justify-between">
@@ -168,10 +163,10 @@ export function AppointmentDetailsSheet({
                 </div>
                 <div className="flex justify-between">
                   <span className="text-sm text-muted-foreground">
-                    Registro
+                    Professor Responsável
                   </span>
                   <span className="text-sm font-medium">
-                    {appointment.professional.crm}
+                    {appointment.professional.responsibleProfessor}
                   </span>
                 </div>
               </div>
@@ -186,12 +181,7 @@ export function AppointmentDetailsSheet({
                 Detalhes do Agendamento
               </h3>
               <div className="bg-muted/50 rounded-lg p-4 space-y-2">
-                <div className="flex justify-between">
-                  <span className="text-sm text-muted-foreground">Tipo</span>
-                  <span className="text-sm font-medium">
-                    {appointment.type}
-                  </span>
-                </div>
+              
                 <div className="flex justify-between">
                   <span className="text-sm text-muted-foreground">Data</span>
                   <span className="text-sm font-medium">
@@ -218,9 +208,9 @@ export function AppointmentDetailsSheet({
               </div>
             </div>
 
-            <Separator />
 
-            <div className="space-y-3">
+
+            {/* <div className="space-y-3">
               <h3 className="font-semibold text-foreground flex items-center gap-2">
                 <GraduationCap className="h-4 w-4" />
                 Aluno Responsável
@@ -233,39 +223,14 @@ export function AppointmentDetailsSheet({
                   </span>
                 </div>
               </div>
-            </div>
+            </div> */}
 
-            <Separator />
 
-            {/* Informações de Criação */}
-            <div className="space-y-3">
-              <h3 className="font-semibold text-foreground flex items-center gap-2">
-                <UserPlus className="h-4 w-4" />
-                Informações de Criação
-              </h3>
-              <div className="bg-muted/50 rounded-lg p-4 space-y-2">
-                <div className="flex justify-between">
-                  <span className="text-sm text-muted-foreground">
-                    Criado por
-                  </span>
-                  <span className="text-sm font-medium">
-                    {appointment.createdBy}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-sm text-muted-foreground">
-                    Data de criação
-                  </span>
-                  <span className="text-sm font-medium">
-                    {new Date(appointment.createdAt).toLocaleString("pt-BR")}
-                  </span>
-                </div>
-              </div>
-            </div>
+           
           </div>
         </ScrollArea>
 
-        <div className="px-6 py-4 border-t bg-background">
+        <div className="px-6 py-4 border-t bg-background shrink-0">
           <div className="flex gap-3">
             <Button
               variant="outline"
