@@ -3,7 +3,6 @@ import {
   TrendingDown,
   Users,
   Calendar,
-  Stethoscope,
   CircleCheckBig,
   AlarmClockCheck
 } from "lucide-react";

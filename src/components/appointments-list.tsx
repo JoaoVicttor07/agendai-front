@@ -13,8 +13,28 @@ import { AppointmentDetails } from "./appointments-details";
 import { cn } from "@/lib/utils";
 import { FilterValues } from "./appointments-filters";
 
+type AppointmentStatus = "pending" | "completed" | "cancelled" | "absent";
+
+export interface Appointment {
+  id: string;
+  status: AppointmentStatus;
+  patient: {
+    name: string;
+    age: number;
+    phone: string;
+  };
+  professional: {
+    student: string;
+    specialty: string;
+    responsibleProfessor: string;
+  };
+  department: string;
+  date: string;
+  time: string;
+}
+
 // Mock data - todos os agendamentos disponíveis
-const allAppointments = [
+const allAppointments: Appointment[] = [
   {
     id: "1",
     patient: {
@@ -23,7 +43,7 @@ const allAppointments = [
       phone: "(11) 98765-4321",
     },
     professional: {
-      name: "João Silva",
+      student: "João Silva",
       specialty: "Nutrição",
       responsibleProfessor: "Liliane Souza",
     },
@@ -40,7 +60,7 @@ const allAppointments = [
       phone: "(11) 91234-5678",
     },
     professional: {
-      name: "Maria Santos",
+      student: "Maria Santos",
       specialty: "Direito Trabalhista",
       responsibleProfessor: "Carlos Pereira",
     },
@@ -57,7 +77,7 @@ const allAppointments = [
       phone: "(11) 99876-5432",
     },
     professional: {
-      name: "Pedro Oliveira",
+      student: "Pedro Oliveira",
       specialty: "Psicologia",
       responsibleProfessor: "Ana Costa",
     },
@@ -74,7 +94,7 @@ const allAppointments = [
       phone: "(11) 97654-3210",
     },
     professional: {
-      name: "Ana Costa",
+      student: "Ana Costa",
       specialty: "Veterinária",
       responsibleProfessor: "Marcos Lima",
     },
@@ -91,7 +111,7 @@ const allAppointments = [
       phone: "(11) 96543-2109",
     },
     professional: {
-      name: "João Silva",
+      student: "João Silva",
       specialty: "Direito do consumidor",
       responsibleProfessor: "Flávia Barretos",
     },
@@ -108,7 +128,7 @@ const allAppointments = [
       phone: "(11) 95432-1098",
     },
     professional: {
-      name: "João Silva",
+      student: "João Silva",
       specialty: "Nutrição",
       responsibleProfessor: "Liliane Souza",
     },
@@ -125,7 +145,7 @@ const allAppointments = [
       phone: "(11) 94321-0987",
     },
     professional: {
-      name: "Maria Santos",
+      student: "Maria Santos",
       specialty: "Direito Trabalhista",
       responsibleProfessor: "Carlos Pereira",
     },
@@ -142,7 +162,7 @@ const allAppointments = [
       phone: "(11) 93210-9876",
     },
     professional: {
-      name: "Pedro Oliveira",
+      student: "Pedro Oliveira",
       specialty: "Psicologia",
       responsibleProfessor: "Ana Costa",
     },
@@ -159,7 +179,7 @@ const allAppointments = [
       phone: "(11) 92109-8765",
     },
     professional: {
-      name: "Ana Costa",
+      student: "Ana Costa",
       specialty: "Veterinária",
       responsibleProfessor: "Marcos Lima",
     },
@@ -176,7 +196,7 @@ const allAppointments = [
       phone: "(11) 91098-7654",
     },
     professional: {
-      name: "João Silva",
+      student: "João Silva",
       specialty: "Nutrição",
       responsibleProfessor: "Liliane Souza",
     },
@@ -216,9 +236,7 @@ interface AppointmentsListProps {
 }
 
 export function AppointmentsList({ showResults, filters }: AppointmentsListProps) {
-  const [selectedAppointment, setSelectedAppointment] = useState<
-    (typeof allAppointments)[0] | null
-  >(null);
+  const [selectedAppointment, setSelectedAppointment] = useState<Appointment | null>(null);
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
 
   // Aplicar filtros aos agendamentos
@@ -265,7 +283,7 @@ export function AppointmentsList({ showResults, filters }: AppointmentsListProps
           "oliveira": "Pedro Oliveira",
           "costa": "Ana Costa",
         };
-        if (appointment.professional.name !== professionalMap[filters.professional]) {
+        if (appointment.professional.student !== professionalMap[filters.professional]) {
           return false;
         }
       }
@@ -304,7 +322,7 @@ export function AppointmentsList({ showResults, filters }: AppointmentsListProps
     });
   }, [filters]);
 
-  const handleAppointmentClick = (appointment: (typeof allAppointments)[0]) => {
+  const handleAppointmentClick = (appointment: Appointment) => {
     setSelectedAppointment(appointment);
     setIsDetailsOpen(true);
   };
@@ -352,7 +370,7 @@ export function AppointmentsList({ showResults, filters }: AppointmentsListProps
               <button
                 key={appointment.id}
                 onClick={() => handleAppointmentClick(appointment)}
-                className="w-full bg-card border border-border rounded-lg p-4 hover:border-primary/50 transition-all duration-200 hover:shadow-lg group"
+                className="w-full bg-card border border-border rounded-lg p-4 hover:border-primary/50 transition-all duration-200 hover:shadow-lg group cursor-pointer"
               >
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex-1 space-y-3">
@@ -383,7 +401,7 @@ export function AppointmentsList({ showResults, filters }: AppointmentsListProps
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 text-sm">
                       <div className="flex items-center gap-2 text-muted-foreground">
                         <Stethoscope className="h-4 w-4" />
-                        <span>{appointment.professional.name}</span>
+                        <span>{appointment.professional.student}</span>
                       </div>
                       <div className="flex items-center gap-2 text-muted-foreground">
                         <Building2 className="h-4 w-4" />

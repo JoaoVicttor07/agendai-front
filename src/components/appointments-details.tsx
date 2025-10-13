@@ -19,6 +19,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
+import { Appointment } from "./appointments-list";
 
 const statusConfig = {
   pending: {
@@ -39,28 +40,8 @@ const statusConfig = {
   },
 };
 
-// interface Appointment {
-//   id: string | number;
-//   status: "pending" | "completed" | "cancelled" | "absent";
-//   patient: {
-//     name: string;
-//     phone: string;
-//   };
-//   professional: {
-//     name: string;
-//     specialty: string;
-//     studentResponsible: string;
-//   };
-//   type: string;
-//   date: string | Date;
-//   time: string;
-//   department: string;
-//   createdBy: string;
-//   createdAt: string | Date;
-// }
-
 interface AppointmentDetailsProps {
-  appointment: any;
+  appointment: Appointment | null;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
@@ -148,9 +129,9 @@ export function AppointmentDetails({
               </h3>
               <div className="bg-muted/50 rounded-lg p-4 space-y-2">
                 <div className="flex justify-between">
-                  <span className="text-sm text-muted-foreground">Nome</span>
+                  <span className="text-sm text-muted-foreground">Aluno</span>
                   <span className="text-sm font-medium">
-                    {appointment.professional.name}
+                    {appointment.professional.student}
                   </span>
                 </div>
                 <div className="flex justify-between">
