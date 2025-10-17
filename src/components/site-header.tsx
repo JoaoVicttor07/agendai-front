@@ -1,6 +1,5 @@
 import { SidebarIcon, Plus } from "lucide-react";
 
-import { SearchForm } from "@/components/search-form";
 import { ModeToggle } from "@/app/_components/themeToggle";
 
 import { Button } from "@/components/ui/button";
@@ -26,7 +25,6 @@ export function SiteHeader() {
         <Separator orientation="vertical" className="mr-2 h-4" />
 
         <ModeToggle />
-        <SearchForm className="w-full hidden sm:block sm:w-auto" />
 
         <Button className="ml-auto bg-blue-600 text-white dark:hover:bg-blue-800 cursor-pointer">
           <Plus />
